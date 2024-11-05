@@ -109,6 +109,10 @@ def get_system_menu_options() -> list:
             'action': ModulePlantation.action_main
         },{
             'code': 3,
+            'title': 'Sensores',
+            'action': ModuleSensor.action_main
+        },{
+            'code': 4,
             'title': 'Sair',
             'action': action_exit
         }
@@ -215,6 +219,12 @@ import prompt.modules.crop as ModuleCrop
 # ---------------------------------------------------------------------------------------------------------------
 
 import prompt.modules.plantation as ModulePlantation
+
+# ---------------------------------------------------------------------------------------------------------------
+# Métodos referentes a opção "Sensores"
+# ---------------------------------------------------------------------------------------------------------------
+
+import prompt.modules.sensor as ModuleSensor
 
 # ... Demais módulos...
 
