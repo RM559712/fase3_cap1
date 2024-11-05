@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 
 import prompt.main as Main
 from custom.helper import Helper
-from models.f3c1crop import F3C1Crop
+from models.f3_c1_crop import F3C1Crop
 
 """
 Método responsável pela exibição do cabeçalho do módulo
