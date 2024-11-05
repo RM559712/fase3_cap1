@@ -459,7 +459,7 @@ def action_ini():
     dict_data_plantation = get_data_plantation_by_id(pln_id)
 
     # <PENDENTE>
-    # - Verificar se não existe uma irrigação já iniciada
+    # - Verificar se não existe uma irrigação já iniciada. Caso já exista, exibir um erro informando que só é possível iniciar quando não existe uma já iniciada.
 
     input(f'Pressione <enter> para iniciar a irrigação para a plantação informada...')
 
@@ -511,8 +511,8 @@ def action_end():
     get_data_plantation_by_id(pln_id)
 
     # <PENDENTE>
-    # - Verificar se existe uma irrigação iniciada
-    # - Carregar e exibir os dados da irrigação ativa
+    # - Verificar se existe uma irrigação iniciada. Caso não exista, exibir um erro informando que só é possível finalizar quando existe uma já iniciada.
+    # - Carregar e exibir os dados da irrigação ativa para que esse registro ESPECÍFICO seja atualizado a partir da coluna "IRG_ID"
     dict_data = {}
 
     print('Os dados abaixo representam a irrigação atual ativa do registro informado.')
@@ -581,7 +581,7 @@ def action_view_status():
     get_data_plantation_by_id(pln_id)
 
     # <PENDENTE>
-    # - Carregar e exibir os dados da irrigação ativa
+    # - Verificar se não existe uma irrigação já iniciada. Caso já exista, exibir um erro informando que existe uma irrigação iniciada para a plantaçõo informada.
     dict_data = {}
 
     print('Os dados abaixo representam a irrigação atual ativa do registro informado.')
