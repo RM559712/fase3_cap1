@@ -414,8 +414,6 @@ def get_data_crop_by_id(crp_id: int = 0) -> dict:
     return dict_data
 
 
-
-
 # ... Demais parâmetros...
 
 

@@ -427,8 +427,6 @@ def get_data_by_id(int_sns_id: int = 0) -> dict:
     return object_f3c1_sensor
 
 
-
-
 # ... Demais parâmetros...
 
 

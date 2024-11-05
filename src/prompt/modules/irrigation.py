@@ -180,7 +180,129 @@ def validate_id() -> int:
     return int(int_return)
 
 
+"""
+Método responsável pela formatação de visualização da origem da execução da irrigação do módulo "Irrigações"
 
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_origin(dict_data: dict = {}) -> str:
+
+    object_f3c1_irrigation = F3C1Irrigation()
+
+    str_return = 'Origem: '
+    str_return += f'{object_f3c1_irrigation.get_label_origin(dict_data['IRG_ORIGIN'])}' if 'IRG_ORIGIN' in dict_data and type(dict_data['IRG_ORIGIN']) != None and Helper.is_int(dict_data['IRG_ORIGIN']) == True else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela formatação de visualização da data de início da irrigação do módulo "Irrigações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_ini_date(dict_data: dict = {}) -> str:
+
+    str_return = 'Data de início: '
+    str_return += f'{Helper.convert_date_to_pt_br(dict_data['IRG_INI_DATE'])}' if 'IRG_INI_DATE' in dict_data and type(dict_data['IRG_INI_DATE']) != None and type(dict_data['IRG_INI_DATE']) == datetime.datetime else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela formatação de visualização da data de finalização da irrigação do módulo "Irrigações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_end_date(dict_data: dict = {}) -> str:
+
+    str_return = 'Data de finalização: '
+    str_return += f'{Helper.convert_date_to_pt_br(dict_data['IRG_END_DATE'])}' if 'IRG_END_DATE' in dict_data and type(dict_data['IRG_END_DATE']) != None and type(dict_data['IRG_END_DATE']) == datetime.datetime else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação do parâmetros "Quantidade de água"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: dict
+"""
+def validate_water(dict_data: dict = {}) -> float:
+
+    bool_is_update = ('IRG_ID' in dict_data and type(dict_data['IRG_ID']) == int)
+
+    print('> Quantidade de água')
+    print('A quantidade de água será exibida no formato [valor] ml ( ex.: 12 ml, 21 ml, etc. )')
+    print('')
+
+    if bool_is_update == True:
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_water(dict_data)}\n')
+
+    int_return = input(f'Informe a quantidade de água utilizada em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if ',' in int_return:
+                int_return = int_return.replace(',', '.')
+
+            if Helper.is_float(int_return) == False and Helper.is_int(int_return) == False:
+                raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            int_return = input()
+
+    return int_return
+
+
+"""
+Método responsável pela formatação de visualização da quantidade de água do módulo "Irrigações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_water(dict_data: dict = {}) -> str:
+
+    str_return = 'Quantidade de água: '
+    str_return += f'{dict_data['IRG_WATER']} ml' if 'IRG_WATER' in dict_data and type(dict_data['IRG_WATER']) != None and Helper.is_float(dict_data['IRG_WATER']) == True else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela formatação de visualização do status de execução execução da irrigação do módulo "Irrigações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_status_execution(dict_data: dict = {}) -> str:
+
+    object_f3c1_irrigation = F3C1Irrigation()
+
+    str_return = 'Status de execução: '
+    str_return += f'{object_f3c1_irrigation.get_label_status_execution(dict_data['IRG_STATUS_EXECUTION'])}' if 'IRG_STATUS_EXECUTION' in dict_data and type(dict_data['IRG_STATUS_EXECUTION']) != None and Helper.is_int(dict_data['IRG_STATUS_EXECUTION']) == True else 'N/I'
+
+    return str_return
 
 
 """
@@ -236,7 +358,11 @@ def format_data_view(dict_data: dict = {}, bool_show_id: bool = True, bool_show_
         str_return += f'- {format_data_view_id(dict_data)} \n' if bool_show_id == True else ''
         str_return += f'- {ModulePlantation.format_data_view_name(dict_data)} \n'
         str_return += f'- {ModuleCrop.format_data_view_name(dict_data)} \n'
-        # <PENDENTE>
+        str_return += f'- {format_data_view_origin(dict_data)} \n'
+        str_return += f'- {format_data_view_ini_date(dict_data)} \n' if bool_show_insert_date == True else ''
+        str_return += f'- {format_data_view_end_date(dict_data)} \n' if bool_show_insert_date == True else ''
+        str_return += f'- {format_data_view_water(dict_data)} \n' if bool_show_insert_date == True else ''
+        str_return += f'- {format_data_view_status_execution(dict_data)} \n' if bool_show_insert_date == True else ''
         str_return += f'- {format_data_view_insert_date(dict_data)} \n' if bool_show_insert_date == True else ''
         str_return += f'- {format_data_view_update_date(dict_data)} \n' if bool_show_update_date == True else ''
 
@@ -295,6 +421,15 @@ def get_data_by_id(int_irg_id: int = 0) -> dict:
     return object_f3c1_irrigation
 
 
+"""
+Método responsável por executar a ação de retorno de dados de uma determinada plantação
+"""
+def get_data_plantation_by_id(pln_id: int = 0) -> dict:
+
+    object_f3c1_plantation = ModulePlantation.get_data_by_id(pln_id)
+    dict_data = object_f3c1_plantation.get_one()
+
+    return dict_data
 
 
 # ... Demais parâmetros...
@@ -309,18 +444,27 @@ def action_ini():
 
     show_head_module()
 
-    print('A irrigação será inicializada para a plantação informada abaixo. Caso já exista uma irrigação iniciada, a mesma deverá ser devidamente encerrada.')
-    print('')
-
     pln_id = ModulePlantation.validate_id()
 
-    dict_data_plantation = ModulePlantation.get_data_by_id(pln_id)
+    # -------
+    # Etapa 2
+    # -------
+
+    Main.loading('Verificando dados, por favor aguarde...')
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_data_plantation = get_data_plantation_by_id(pln_id)
 
     # <PENDENTE>
     # - Verificar se não existe uma irrigação já iniciada
 
+    input(f'Pressione <enter> para iniciar a irrigação para a plantação informada...')
+
     # -------
-    # Etapa 2
+    # Etapa 3
     # -------
 
     Main.loading('Inicializando irrigação, por favor aguarde...')
@@ -336,9 +480,7 @@ def action_ini():
     object_f3c1_irrigation = F3C1Irrigation()
     object_f3c1_irrigation.insert(dict_data)
 
-    print(format_data_view(dict_data = dict_data, bool_show_id = False, bool_show_insert_date = False, bool_show_update_date = False))
-
-    print('Irrigação inicializada com sucesso.')
+    print('Irrigação iniciada com sucesso.')
 
     require_reload()
 
@@ -354,15 +496,7 @@ def action_end():
 
     validate_exists_data()
 
-    print('Caso a plantação informada abaixo possua uma irrigação inicializada, será possível encerrá-la informando alguns parâmetros.')
-    print('')
-
     pln_id = ModulePlantation.validate_id()
-
-    ModulePlantation.get_data_by_id(pln_id)
-
-    # <PENDENTE>
-    # - Verificar se existe uma irrigação iniciada
 
     # -------
     # Etapa 2
@@ -374,7 +508,10 @@ def action_end():
 
     show_head_module()
 
+    get_data_plantation_by_id(pln_id)
+
     # <PENDENTE>
+    # - Verificar se existe uma irrigação iniciada
     # - Carregar e exibir os dados da irrigação ativa
     dict_data = {}
 
@@ -393,14 +530,9 @@ def action_end():
 
     show_head_module()
 
-    print('Os parâmetros abaixo fazem parte do encerramento da irrigação.')
-    print('')
+    irg_water = validate_water()
 
-    # <PENDENTE>
-    # - Armazenar a quantidade de água utilizada na irrigação
-    irg_water = ''
-
-    Main.loading('Encerrando irrigação, por favor aguarde...')
+    Main.loading('Finalizando irrigação, por favor aguarde...')
 
     # -------
     # Etapa 4
@@ -418,7 +550,7 @@ def action_end():
 
     print(format_data_view(dict_data = dict_data, bool_show_update_date = False))
 
-    print('Irrigação encerrada com sucesso.')
+    print('Irrigação finalizada com sucesso.')
     
     require_reload()
 
@@ -434,12 +566,7 @@ def action_view_status():
 
     validate_exists_data()
 
-    print('Caso a plantação informada abaixo possua uma irrigação inicializada, será possível visualizar suas informações.')
-    print('')
-
     pln_id = ModulePlantation.validate_id()
-
-    ModulePlantation.get_data_by_id(pln_id)
 
     # -------
     # Etapa 2
@@ -450,6 +577,8 @@ def action_view_status():
     Main.init_step()
 
     show_head_module()
+
+    get_data_plantation_by_id(pln_id)
 
     # <PENDENTE>
     # - Carregar e exibir os dados da irrigação ativa
