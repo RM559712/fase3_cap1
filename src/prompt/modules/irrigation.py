@@ -458,6 +458,11 @@ def action_ini():
 
     dict_data_plantation = get_data_plantation_by_id(pln_id)
 
+    print('Os dados abaixo representam o cadastro atual do registro informado.')
+    print('')
+
+    print(ModulePlantation.format_data_view(dict_data_plantation))
+
     input(f'Pressione <enter> para iniciar a irrigação para a plantação informada...')
 
     # -------
