@@ -366,7 +366,10 @@ def action_list():
 
     object_f3c1_plantation.set_select(['PLN.*', 'CRP.CRP_NAME'])
     object_f3c1_plantation.set_table('F3_C1_PLANTATION PLN')
-    object_f3c1_plantation.set_join([{'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_CROP CRP', 'str_where': 'CRP.CRP_ID = PLN.PLN_CRP_ID'}])
+    object_f3c1_plantation.set_join([
+        {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_CROP CRP', 'str_where': 'CRP.CRP_ID = PLN.PLN_CRP_ID'},
+        {'str_type_join': 'LEFT JOIN', 'str_table': 'F3_C1_PLANTATION_CONFIG_IRRIGATION PCI', 'str_where': 'PCI.PCI_PLN_ID = PLN.PLN_ID'}
+    ])
     object_f3c1_plantation.set_where([F3C1Plantation.get_params_to_active_data()])
     object_f3c1_plantation.set_order([{'str_column': 'PLN.PLN_ID', 'str_type_order': 'ASC'}])
     list_data = object_f3c1_plantation.get_data().get_list()
@@ -435,8 +438,6 @@ def action_insert():
 
     int_pln_crp_id = validate_crop_id()
 
-    Main.loading('Salvando dados, por favor aguarde...')
-
     # -------
     # Etapa 2
     # -------
@@ -444,6 +445,30 @@ def action_insert():
     Main.init_step()
 
     show_head_module()
+
+    print('Os próximos parâmetros fazem parte da configuração da plantação para que o sistema de irrigação automátio seja executado e não são obrigatórios.')
+    input(f'\nPressione <enter> para continuar...')
+
+    # -------
+    # Etapa 3
+    # -------
+
+    #Main.init_step()
+
+    #show_head_module()
+
+    # <PENDENTE>
+    # - Adicionar parâmetros da plantação 
+
+    # -------
+    # Etapa 
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    Main.loading('Salvando dados, por favor aguarde...')
 
     dict_data = {}
 
