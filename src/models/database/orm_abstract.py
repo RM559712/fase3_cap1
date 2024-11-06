@@ -672,3 +672,10 @@ class OrmAbstract(ABC):
         return self
 
 
+    def generate_sql_query_get_last_id(self):
+
+        self.sql_query = f'SELECT {self.primary_key_column} as LAST_ID FROM {self.table_name.strip()} WHERE ROWNUM = 1 ORDER BY {self.primary_key_column} DESC'
+
+        return self
+
+

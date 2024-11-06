@@ -293,6 +293,230 @@ def validate_crop_id(dict_data: dict = {}) -> int:
 
 
 """
+Método responsável pela formatação de visualização da temperatura do módulo "Plantações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_temp(dict_data: dict = {}) -> str:
+
+    str_return = None
+    list_labels = []
+
+    if 'PCI_TEMP_MIN' in dict_data and type(dict_data['PCI_TEMP_MIN']) != None and Helper.is_float(dict_data['PCI_TEMP_MIN']) == True:
+        list_labels.append(f'Mínimo de {dict_data['PCI_TEMP_MIN']}°C')
+
+    if 'PCI_TEMP_MAX' in dict_data and type(dict_data['PCI_TEMP_MAX']) != None and Helper.is_float(dict_data['PCI_TEMP_MAX']) == True:
+        list_labels.append(f'Máximo de {dict_data['PCI_TEMP_MAX']}°C')
+
+    str_return = 'Temperatura ideal: '
+    str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação dos parâmetros "temperatura mínima" e "temperatura máxima"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: dict
+"""
+def validate_temp(dict_data: dict = {}) -> dict:
+
+    dict_return = {'pci_temp_min': None, 'pci_temp_max': None}
+
+    bool_is_update = ('PLN_ID' in dict_data and type(dict_data['PLN_ID']) == int)
+
+    print('> Temperatura')
+    print('A temperatura será exibida no formato [valor]°C ( ex.: 12°C, 21°C, etc. )')
+    print('')
+
+    if bool_is_update == True:
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_temp(dict_data)}\n')
+
+    # ----------------
+    # Parâmetro mínimo
+    # ----------------
+
+    pci_temp_min = input(f'Caso exista, informe a temperatura mínima para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_temp_min.strip() != '':
+
+                if ',' in pci_temp_min:
+                    pci_temp_min = pci_temp_min.replace(',', '.')
+
+                if Helper.is_float(pci_temp_min) == False and Helper.is_int(pci_temp_min) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_temp_min = input()
+
+    if pci_temp_min.strip() != '':
+        dict_return['pci_temp_min'] = float(pci_temp_min)
+
+    # ----------------
+    # Parâmetro máximo
+    # ----------------
+
+    print('')
+
+    pci_temp_max = input(f'Caso exista, informe a temperatura máxima para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_temp_max.strip() != '':
+
+                if ',' in pci_temp_max:
+                    pci_temp_max = pci_temp_max.replace(',', '.')
+
+                if Helper.is_float(pci_temp_max) == False and Helper.is_int(pci_temp_max) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+                if type(dict_return['pci_temp_min']) != type(None):
+
+                    if float(pci_temp_max) <= dict_return['pci_temp_min']:
+                        raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_temp_max = input()
+
+    if pci_temp_max.strip() != '':
+        dict_return['pci_temp_max'] = float(pci_temp_max)
+
+    return dict_return
+
+
+"""
+Método responsável pela formatação de visualização da umidade do módulo "Plantações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_humidity(dict_data: dict = {}) -> str:
+
+    str_return = None
+    list_labels = []
+
+    if 'PCI_HUMIDITY_MIN' in dict_data and type(dict_data['PCI_HUMIDITY_MIN']) != None and Helper.is_float(dict_data['PCI_HUMIDITY_MIN']) == True:
+        list_labels.append(f'Mínimo de {dict_data['PCI_HUMIDITY_MIN']}%')
+
+    if 'PCI_HUMIDITY_MAX' in dict_data and type(dict_data['PCI_HUMIDITY_MAX']) != None and Helper.is_float(dict_data['PCI_HUMIDITY_MAX']) == True:
+        list_labels.append(f'Máximo de {dict_data['PCI_HUMIDITY_MAX']}%')
+
+    str_return = 'Umidade ideal: '
+    str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação dos parâmetros "umidade mínima" e "umidade máxima"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: dict
+"""
+def validate_humidity(dict_data: dict = {}) -> dict:
+
+    dict_return = {'pci_humidity_min': None, 'pci_humidity_max': None}
+
+    print('> Umidade')
+    print('A umidade será exibida no formato [valor]% ( ex.: 12%, 21%, etc. )')
+    print('')
+
+    bool_is_update = ('CRP_ID' in dict_data and type(dict_data['CRP_ID']) == int)
+
+    if bool_is_update == True:
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_humidity(dict_data)}\n')
+
+    # ----------------
+    # Parâmetro mínimo
+    # ----------------
+
+    pci_humidity_min = input(f'Caso exista, informe a umidade mínima para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_humidity_min.strip() != '':
+
+                if ',' in pci_humidity_min:
+                    pci_humidity_min = pci_humidity_min.replace(',', '.')
+
+                if Helper.is_float(pci_humidity_min) == False and Helper.is_int(pci_humidity_min) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_humidity_min = input()
+
+    if pci_humidity_min.strip() != '':
+        dict_return['pci_humidity_min'] = float(pci_humidity_min)
+
+    # ----------------
+    # Parâmetro máximo
+    # ----------------
+
+    print('')
+
+    pci_humidity_max = input(f'Caso exista, informe a umidade máxima para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_humidity_max.strip() != '':
+
+                if ',' in pci_humidity_max:
+                    pci_humidity_max = pci_humidity_max.replace(',', '.')
+
+                if Helper.is_float(pci_humidity_max) == False and Helper.is_int(pci_humidity_max) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+                if type(dict_return['pci_humidity_min']) != type(None):
+
+                    if float(pci_humidity_max) <= dict_return['pci_humidity_min']:
+                        raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_humidity_max = input()
+
+    if pci_humidity_max.strip() != '':
+        dict_return['pci_humidity_max'] = float(pci_humidity_max)
+
+    return dict_return
+
+
+"""
 Método responsável pela formatação de visualização da data de cadastro do módulo "Plantações"
 
 Arguments:
@@ -364,7 +588,7 @@ def action_list():
 
     object_f3c1_plantation = F3C1Plantation()
 
-    object_f3c1_plantation.set_select(['PLN.*', 'CRP.CRP_NAME'])
+    object_f3c1_plantation.set_select(['PLN.*', 'CRP.CRP_NAME', 'PCI.*'])
     object_f3c1_plantation.set_table('F3_C1_PLANTATION PLN')
     object_f3c1_plantation.set_join([
         {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_CROP CRP', 'str_where': 'CRP.CRP_ID = PLN.PLN_CRP_ID'},
@@ -388,9 +612,12 @@ def get_data_by_id(int_pln_id: int = 0) -> dict:
 
     object_f3c1_plantation = F3C1Plantation()
 
-    object_f3c1_plantation.set_select(['PLN.*', 'CRP.CRP_NAME'])
+    object_f3c1_plantation.set_select(['PLN.*', 'CRP.CRP_NAME', 'PCI.*'])
     object_f3c1_plantation.set_table('F3_C1_PLANTATION PLN')
-    object_f3c1_plantation.set_join([{'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_CROP CRP', 'str_where': 'CRP.CRP_ID = PLN.PLN_CRP_ID'}])
+    object_f3c1_plantation.set_join([
+        {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_CROP CRP', 'str_where': 'CRP.CRP_ID = PLN.PLN_CRP_ID'},
+        {'str_type_join': 'LEFT JOIN', 'str_table': 'F3_C1_PLANTATION_CONFIG_IRRIGATION PCI', 'str_where': 'PCI.PCI_PLN_ID = PLN.PLN_ID'}
+    ])
     object_f3c1_plantation.set_where([
 
         {'str_column': 'PLN.PLN_ID', 'str_type_where': '=', 'value': int_pln_id},
@@ -446,19 +673,33 @@ def action_insert():
 
     show_head_module()
 
-    print('Os próximos parâmetros fazem parte da configuração da plantação para que o sistema de irrigação automátio seja executado e não são obrigatórios.')
+    print('Os próximos parâmetros fazem parte da configuração da plantação para que o sistema automático de irrigação seja executado e não são obrigatórios.')
     input(f'\nPressione <enter> para continuar...')
 
     # -------
     # Etapa 3
     # -------
 
-    #Main.init_step()
+    Main.init_step()
 
-    #show_head_module()
+    show_head_module()
+
+    dict_temp = validate_temp()
+
+    # -------
+    # Etapa 4
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_humidity = validate_humidity()
+
+    
 
     # <PENDENTE>
-    # - Adicionar parâmetros da plantação 
+    # Fazer os demais parâmetros
 
     # -------
     # Etapa 
@@ -477,6 +718,13 @@ def action_insert():
 
     object_f3c1_plantation = F3C1Plantation()
     object_f3c1_plantation.insert(dict_data)
+
+    # <PENDENTE>
+    # - Retornar o ID cadastrado
+    #print(object_f3c1_plantation.get_last_id())
+
+    # <PENDENTE>
+    # - Cadastrar as configurações adicionais da plantação caso exista
 
     # > Regras: Processo de complemento do objeto de dados, adicionando os parâmetros referente à cultura selecionada
     dict_data_crop = get_data_crop_by_id(int_pln_crp_id)

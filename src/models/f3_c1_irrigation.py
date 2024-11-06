@@ -94,7 +94,7 @@ class F3C1Irrigation(Database):
 
     def begin_execution_by_plantation(self, dict_params: dict = {}) -> dict:
 
-        dict_return = {'status': True, 'dict_data': {}}
+        dict_return = {'status': True}
 
         try:
 
@@ -119,7 +119,7 @@ class F3C1Irrigation(Database):
 
     def finish_execution_by_plantation(self, dict_params: dict = {}) -> dict:
 
-        dict_return = {'status': True, 'dict_data': {}}
+        dict_return = {'status': True}
 
         try:
 

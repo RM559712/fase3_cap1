@@ -99,9 +99,10 @@ class Database(OrmAbstract):
 
         return self.data
 
-    def get_one(self):
+    def get_one(self, bool_reset_data: bool = True):
 
-        self.__reset_data()
+        if bool_reset_data == True:
+            self.__reset_data()
 
         list_data = self.get_list()
 
@@ -136,3 +137,14 @@ class Database(OrmAbstract):
         self.execute_query(str_query)
 
         return self
+
+    def get_last_id(self):
+
+        str_query = self.generate_sql_query_get_last_id().sql_query
+        self.execute_query(str_query)
+
+        dict_data = self.get_one(False)
+
+        return dict_data['LAST_ID'] if 'LAST_ID' in dict_data else 0
+
+
