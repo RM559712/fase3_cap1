@@ -62,7 +62,7 @@ def get_menu_options() -> list:
             'action': action_end
         },{
             'code': 4,
-            'title': 'Visualizar status de irrigação por plantação',
+            'title': 'Visualizar informações de irrigação ativa por plantação',
             'action': action_view_status
         },{
             'code': 5,
@@ -584,14 +584,16 @@ def action_view_status():
 
     get_data_plantation_by_id(pln_id)
 
-    # <PENDENTE>
-    # - Verificar se não existe uma irrigação já iniciada. Caso já exista, exibir um erro informando que existe uma irrigação iniciada para a plantaçõo informada.
-    dict_data = {}
+    object_f3c1_irrigation = F3C1Irrigation()
+
+    dict_active_irrigation = object_f3c1_irrigation.get_active_execution_by_plantation(pln_id)
+    if dict_active_irrigation['status'] == False:
+        raise Exception(dict_active_irrigation['message'])
 
     print('Os dados abaixo representam a irrigação atual ativa do registro informado.')
     print('')
 
-    print(format_data_view(dict_data))
+    print(format_data_view(dict_active_irrigation['dict_data']))
 
     require_reload()
 
