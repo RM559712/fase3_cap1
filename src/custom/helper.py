@@ -84,3 +84,10 @@ class Helper:
         return f'{object_datetime.strftime("%Y-%m-%d %H:%M:%S")},{object_datetime.microsecond}' if bool_microsecond == True else f'{object_datetime.strftime("%Y-%m-%d %H:%M:%S")}'
 
 
+    @staticmethod
+    def get_current_datetime_to_oracle(bool_microsecond: bool = False) -> str:
+
+        object_datetime = datetime.now()
+        return f'{object_datetime.strftime("%d/%m/%Y %H:%M:%S")},{object_datetime.microsecond}' if bool_microsecond == True else f'{object_datetime.strftime("%d/%m/%Y %H:%M:%S")}'
+
+

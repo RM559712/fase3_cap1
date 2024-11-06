@@ -55,3 +55,96 @@ class F3C1Irrigation(Database):
         return str_return
 
 
+    def get_active_execution_by_plantation(self, pln_id: int = 0) -> dict:
+
+        dict_return = {'status': True, 'dict_data': {}}
+
+        try:
+
+            self.set_select(['IRG.*', 'PLN.PLN_NAME', 'CRP.CRP_NAME'])
+            self.set_table('F3_C1_IRRIGATION IRG')
+            self.set_join([
+                {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_PLANTATION PLN', 'str_where': 'PLN.PLN_ID = IRG.IRG_PLN_ID'},
+                {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_CROP CRP', 'str_where': 'CRP.CRP_ID = PLN.PLN_CRP_ID'}
+            ])
+            self.set_where([
+                F3C1Irrigation.get_params_to_active_data(),
+                {'str_column': 'PLN.PLN_ID', 'str_type_where': '=', 'value': pln_id},
+                {'str_column': 'IRG.IRG_STATUS_EXECUTION', 'str_type_where': '=', 'value': self.STATUS_EXECUTION_RUNNING}
+            ])
+            dict_data = self.get_data().get_one()
+
+            if type(dict_data) == type(None):
+                raise Exception(f'Não foi possível concluir o processo pois a plantação informada não possui uma execução ativa.')
+            
+            dict_return['dict_data'] = dict_data
+
+        except Exception as error:
+
+            dict_return = {'status': False, 'message': error}
+
+        return dict_return
+
+
+    def validate_exists_active_execution_by_plantation(self, pln_id: int = 0) -> bool:
+
+        dict_active_irrigation = self.get_active_execution_by_plantation(pln_id)
+        return dict_active_irrigation['status']
+
+
+    def begin_execution_by_plantation(self, dict_params: dict = {}) -> dict:
+
+        dict_return = {'status': True, 'dict_data': {}}
+
+        try:
+
+            if 'pln_id' not in dict_params or Helper.is_int(dict_params['pln_id']) == False:
+                raise Exception(f'Não foi possível concluir o processo pois não foi definida nenhuma referência de plantação para iniciar uma irrigação.')
+
+            if self.validate_exists_active_execution_by_plantation(dict_params['pln_id']) == True:
+                raise Exception(f'Não foi possível concluir o processo pois a plantação informada já possui uma execução ativa.')
+
+            dict_data = {}
+
+            dict_data['IRG_PLN_ID'] = dict_params['pln_id']
+
+            self.insert(dict_data)
+
+        except Exception as error:
+
+            dict_return = {'status': False, 'message': error}
+
+        return dict_return
+
+
+    def finish_execution_by_plantation(self, dict_params: dict = {}) -> dict:
+
+        dict_return = {'status': True, 'dict_data': {}}
+
+        try:
+
+            if 'pln_id' not in dict_params or Helper.is_int(dict_params['pln_id']) == False:
+                raise Exception(f'Não foi possível concluir o processo pois não foi definida nenhuma referência de plantação para finalizar a irrigação.')
+
+            if self.validate_exists_active_execution_by_plantation(dict_params['pln_id']) == False:
+                raise Exception(f'Não foi possível concluir o processo pois a plantação informada não possui uma execução ativa.')
+
+            dict_active_irrigation = self.get_active_execution_by_plantation(dict_params['pln_id'])
+            if dict_active_irrigation['status'] == False:
+                    raise Exception(dict_active_irrigation['message'])
+
+            irg_water = dict_params['irg_water'] if 'irg_water' in dict_params and Helper.is_float(dict_params['irg_water']) == True else 0.00
+
+            dict_active_irrigation['IRG_WATER'] = irg_water
+            dict_active_irrigation['IRG_END_DATE'] = f"TO_TIMESTAMP('{Helper.get_current_datetime_to_oracle()}', 'DD/MM/YYYY HH24:MI:SS.FF6')"
+            dict_active_irrigation['IRG_STATUS_EXECUTION'] = self.STATUS_EXECUTION_FINISHED
+
+            self.update(dict_active_irrigation)
+
+        except Exception as error:
+
+            dict_return = {'status': False, 'message': error}
+
+        return dict_return
+
+

@@ -249,7 +249,7 @@ def validate_water(dict_data: dict = {}) -> float:
     if bool_is_update == True:
         print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_water(dict_data)}\n')
 
-    int_return = input(f'Informe a quantidade de água utilizada em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+    int_return = input(f'Informe a quantidade de água utilizada na irrigação em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
 
     while True:
 
@@ -458,27 +458,28 @@ def action_ini():
 
     dict_data_plantation = get_data_plantation_by_id(pln_id)
 
-    # <PENDENTE>
-    # - Verificar se não existe uma irrigação já iniciada. Caso já exista, exibir um erro informando que só é possível iniciar quando não existe uma já iniciada.
-
     input(f'Pressione <enter> para iniciar a irrigação para a plantação informada...')
 
     # -------
     # Etapa 3
     # -------
 
-    Main.loading('Inicializando irrigação, por favor aguarde...')
+    Main.loading('Iniciando irrigação, por favor aguarde...')
 
     Main.init_step()
 
     show_head_module()
 
-    dict_data = {}
-
-    dict_data['IRG_PLN_ID'] = dict_data_plantation['PLN_ID']
-
     object_f3c1_irrigation = F3C1Irrigation()
-    object_f3c1_irrigation.insert(dict_data)
+
+    dict_begin_execution = object_f3c1_irrigation.begin_execution_by_plantation({
+
+        'pln_id': dict_data_plantation['PLN_ID']
+
+    })
+
+    if dict_begin_execution['status'] == False:
+        raise Exception(dict_begin_execution['message'])
 
     print('Irrigação iniciada com sucesso.')
 
@@ -510,15 +511,16 @@ def action_end():
 
     get_data_plantation_by_id(pln_id)
 
-    # <PENDENTE>
-    # - Verificar se existe uma irrigação iniciada. Caso não exista, exibir um erro informando que só é possível finalizar quando existe uma já iniciada.
-    # - Carregar e exibir os dados da irrigação ativa para que esse registro ESPECÍFICO seja atualizado a partir da coluna "IRG_ID"
-    dict_data = {}
+    object_f3c1_irrigation = F3C1Irrigation()
+
+    dict_active_irrigation = object_f3c1_irrigation.get_active_execution_by_plantation(pln_id)
+    if dict_active_irrigation['status'] == False:
+        raise Exception(dict_active_irrigation['message'])
 
     print('Os dados abaixo representam a irrigação atual ativa do registro informado.')
     print('')
 
-    print(format_data_view(dict_data))
+    print(format_data_view(dict_active_irrigation['dict_data']))
 
     input(f'Pressione <enter> para continuar...')
 
@@ -542,13 +544,15 @@ def action_end():
 
     show_head_module()
 
-    if irg_water.strip() != '':
-        dict_data['IRG_WATER'] = irg_water
+    dict_finish_execution = object_f3c1_irrigation.finish_execution_by_plantation({
 
-    object_f3c1_irrigation = F3C1Irrigation()
-    object_f3c1_irrigation.update(dict_data)
+        'pln_id': pln_id,
+        'irg_water': irg_water
 
-    print(format_data_view(dict_data = dict_data, bool_show_update_date = False))
+    })
+
+    if dict_finish_execution['status'] == False:
+        raise Exception(dict_finish_execution['message'])
 
     print('Irrigação finalizada com sucesso.')
     

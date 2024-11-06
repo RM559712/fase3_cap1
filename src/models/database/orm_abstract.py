@@ -613,6 +613,11 @@ class OrmAbstract(ABC):
 
                 if type(value) == int or Helper.is_float(value) == True:
                     list_query.append(f'{str_column} = {value}')
+
+                # Regras: Caso sejam definidos outros métodos para serem executados na query, basta adicioná-los abaixo
+                elif value.find('TO_TIMESTAMP') != -1 or value.find('TO_DATE') != -1:
+                    list_query.append(f'{str_column} = {value}')
+
                 else:
 
                     # Regras: Para essa ação, os valores devem ser formatados com aspas simples
@@ -644,6 +649,11 @@ class OrmAbstract(ABC):
 
             if type(value) == int or Helper.is_float(value) == True:
                 list_values_insert.append(value)
+
+            # Regras: Caso sejam definidos outros métodos para serem executados na query, basta adicioná-los abaixo
+            elif value.find('TO_TIMESTAMP') != -1 or value.find('TO_DATE') != -1:
+                list_values_insert.append(f'{str_column} = {value}')
+
             else:
 
                 # Regras: Para essa ação, os valores devem ser formatados com aspas simples
