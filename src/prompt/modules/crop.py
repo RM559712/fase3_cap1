@@ -489,7 +489,7 @@ def action_delete():
     object_f3c1_crop = get_data_by_id(int_crp_id)
     dict_data = object_f3c1_crop.get_one()
 
-    dict_data['CRP_STATUS'] = 0
+    dict_data['CRP_STATUS'] = F3C1Crop.STATUS_DELETED
 
     object_f3c1_crop.update(dict_data)
 

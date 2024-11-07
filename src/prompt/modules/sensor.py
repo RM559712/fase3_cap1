@@ -574,7 +574,7 @@ def action_delete():
     object_f3c1_sensor = get_data_by_id(int_sns_id)
     dict_data = object_f3c1_sensor.get_one()
 
-    dict_data['SNS_STATUS'] = 0
+    dict_data['SNS_STATUS'] = F3C1Sensor.STATUS_DELETED
 
     object_f3c1_sensor.update(dict_data)
 

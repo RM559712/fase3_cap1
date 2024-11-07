@@ -15,7 +15,7 @@ class F3C1Plantation(Database):
     def get_params_to_active_data() -> dict:
 
         # Regras: Os registros são excluídos de forma lógica
-        return {'str_column': 'PLN_STATUS', 'str_type_where': '=', 'value': 1}
+        return {'str_column': 'PLN_STATUS', 'str_type_where': '=', 'value': Database.STATUS_ACTIVE}
 
 
     def validate_exists_data(self) -> bool:

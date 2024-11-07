@@ -5,6 +5,10 @@ from models.database.oracle import Oracle
 
 class Database(OrmAbstract):
 
+    # Constantes referentes à status de exclusão
+    STATUS_DELETED = 0
+    STATUS_ACTIVE = 1
+
     __object_database = None
 
     def __init__(self, object_database = None):

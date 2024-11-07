@@ -977,7 +977,7 @@ Return: str
 def format_data_view_latitude(dict_data: dict = {}) -> str:
 
     str_return = 'Latitude: '
-    str_return += f'{dict_data['PCL_LATITUDE'].strip()}' if 'PCL_LATITUDE' in dict_data and type(dict_data['PCL_LATITUDE']) != None and type(dict_data['PCL_LATITUDE']) == str else 'N/I'
+    str_return += f'{dict_data['PCL_LATITUDE']}' if 'PCL_LATITUDE' in dict_data and type(dict_data['PCL_LATITUDE']) != None and Helper.is_float(dict_data['PCL_LATITUDE']) == True else 'N/I'
 
     return str_return
 
@@ -1031,7 +1031,7 @@ Return: str
 def format_data_view_longitude(dict_data: dict = {}) -> str:
 
     str_return = 'Longitude: '
-    str_return += f'{dict_data['PCL_LONGITUDE'].strip()}' if 'PCL_LONGITUDE' in dict_data and type(dict_data['PCL_LONGITUDE']) != None and type(dict_data['PCL_LONGITUDE']) == str else 'N/I'
+    str_return += f'{dict_data['PCL_LONGITUDE']}' if 'PCL_LONGITUDE' in dict_data and type(dict_data['PCL_LONGITUDE']) != None and Helper.is_float(dict_data['PCL_LONGITUDE']) == True else 'N/I'
 
     return str_return
 
@@ -1202,6 +1202,56 @@ def get_data_by_id(int_pln_id: int = 0) -> dict:
 
 
 """
+Método responsável por executar a ação de retorno de dados de configurações de irrigação uma determinada plantação
+"""
+def get_data_config_irrigation_by_id(int_pln_id: int = 0, bool_create_new: bool = True) -> dict:
+
+    object_f3c1_plantation_config_irrigation = F3C1PlantationConfigIrrigation()
+
+    object_f3c1_plantation_config_irrigation.set_where([
+
+        {'str_column': 'PCI_PLN_ID', 'str_type_where': '=', 'value': int_pln_id},
+        F3C1PlantationConfigIrrigation.get_params_to_active_data()
+
+    ])
+
+    dict_data = object_f3c1_plantation_config_irrigation.get_data().get_one()
+
+    if type(dict_data) == type(None) and bool_create_new == True:
+
+        object_f3c1_plantation_config_irrigation.insert({'PCI_PLN_ID': int_pln_id})
+
+        return get_data_config_irrigation_by_id(int_pln_id)
+
+    return object_f3c1_plantation_config_irrigation
+
+
+"""
+Método responsável por executar a ação de retorno de dados de localização uma determinada plantação
+"""
+def get_data_config_location_by_id(int_pln_id: int = 0, bool_create_new: bool = True) -> dict:
+
+    object_f3c1_plantation_config_location = F3C1PlantationConfigLocation()
+
+    object_f3c1_plantation_config_location.set_where([
+
+        {'str_column': 'PCL_PLN_ID', 'str_type_where': '=', 'value': int_pln_id},
+        F3C1PlantationConfigLocation.get_params_to_active_data()
+
+    ])
+
+    dict_data = object_f3c1_plantation_config_location.get_data().get_one()
+
+    if type(dict_data) == type(None) and bool_create_new == True:
+
+        object_f3c1_plantation_config_location.insert({'PCL_PLN_ID': int_pln_id})
+
+        return get_data_config_location_by_id(int_pln_id)
+
+    return object_f3c1_plantation_config_location
+
+
+"""
 Método responsável por executar a ação de retorno de dados de uma determinada cultura
 """
 def get_data_crop_by_id(crp_id: int = 0) -> dict:
@@ -1329,6 +1379,8 @@ def action_insert():
 
     float_longitude = validate_longitude()
 
+    Main.loading('Salvando dados, por favor aguarde...')
+
     # --------
     # Etapa 11
     # --------
@@ -1336,8 +1388,6 @@ def action_insert():
     Main.init_step()
 
     show_head_module()
-
-    Main.loading('Salvando dados, por favor aguarde...')
 
     dict_data = {}
 
@@ -1349,20 +1399,68 @@ def action_insert():
 
     int_pln_id = object_f3c1_plantation.get_last_id()
 
-    # <PENDENTE>
-    # - Cadastrar as configurações adicionais da plantação caso exista
+    # ----------------------------------------------------------------
+    # Processo de cadastro dos parâmetros de configuração de irrigação
+    # ----------------------------------------------------------------
 
-    # ---------------------------------------------------
-    # Processo de cadastro dos parâmetros de configuração
-    # ---------------------------------------------------
+    object_f3c1_plantation_config_irrigation = get_data_config_irrigation_by_id(int_pln_id, True)
+    dict_data_config_irrigation = object_f3c1_plantation_config_irrigation.get_one()
 
-    
+    if 'pci_temp_min' in dict_temp and type(dict_temp['pci_temp_min']) != type(None):
+        dict_data_config_irrigation['PCI_TEMP_MIN'] = dict_temp['pci_temp_min']
+
+    if 'pci_temp_max' in dict_temp and type(dict_temp['pci_temp_max']) != type(None):
+        dict_data_config_irrigation['PCI_TEMP_MAX'] = dict_temp['pci_temp_max']
+
+    if 'pci_humidity_min' in dict_humidity and type(dict_humidity['pci_humidity_min']) != type(None):
+        dict_data_config_irrigation['PCI_HUMIDITY_MIN'] = dict_humidity['pci_humidity_min']
+
+    if 'pci_humidity_max' in dict_humidity and type(dict_humidity['pci_humidity_max']) != type(None):
+        dict_data_config_irrigation['PCI_HUMIDITY_MAX'] = dict_humidity['pci_humidity_max']
+
+    if 'pci_light_min' in dict_light and type(dict_light['pci_light_min']) != type(None):
+        dict_data_config_irrigation['PCI_LIGHT_MIN'] = dict_light['pci_light_min']
+
+    if 'pci_light_max' in dict_light and type(dict_light['pci_light_max']) != type(None):
+        dict_data_config_irrigation['PCI_LIGHT_MAX'] = dict_light['pci_light_max']
+
+    if 'pci_radiation_min' in dict_radiation and type(dict_radiation['pci_radiation_min']) != type(None):
+        dict_data_config_irrigation['PCI_RADIATION_MIN'] = dict_radiation['pci_radiation_min']
+
+    if 'pci_radiation_max' in dict_radiation and type(dict_radiation['pci_radiation_max']) != type(None):
+        dict_data_config_irrigation['PCI_RADIATION_MAX'] = dict_radiation['pci_radiation_max']
+
+    if 'pci_salinity_min' in dict_salinity and type(dict_salinity['pci_salinity_min']) != type(None):
+        dict_data_config_irrigation['PCI_SALINITY_MIN'] = dict_salinity['pci_salinity_min']
+
+    if 'pci_salinity_max' in dict_salinity and type(dict_salinity['pci_salinity_max']) != type(None):
+        dict_data_config_irrigation['PCI_SALINITY_MAX'] = dict_salinity['pci_salinity_max']
+
+    if 'pci_ph_min' in dict_ph and type(dict_ph['pci_ph_min']) != type(None):
+        dict_data_config_irrigation['PCI_PH_MIN'] = dict_ph['pci_ph_min']
+
+    if 'pci_ph_max' in dict_ph and type(dict_ph['pci_ph_max']) != type(None):
+        dict_data_config_irrigation['PCI_PH_MAX'] = dict_ph['pci_ph_max']
+
+    object_f3c1_plantation_config_irrigation.update(dict_data_config_irrigation)
 
     # --------------------------------------------------
     # Processo de cadastro dos parâmetros de localização
     # --------------------------------------------------
 
+    object_f3c1_plantation_config_location = get_data_config_location_by_id(int_pln_id, True)
+    dict_data_config_location = object_f3c1_plantation_config_location.get_one()
 
+    if float_latitude > 0.00:
+        dict_data_config_location['PCL_LATITUDE'] = float_latitude
+
+    if float_longitude > 0.00:
+        dict_data_config_location['PCL_LONGITUDE'] = float_longitude
+
+    object_f3c1_plantation_config_location.update(dict_data_config_location)
+
+    object_f3c1_plantation = get_data_by_id(int_pln_id)
+    dict_data = object_f3c1_plantation.get_one()
 
     print(format_data_view(dict_data = dict_data, bool_show_id = False, bool_show_insert_date = False, bool_show_update_date = False))
 
@@ -1421,6 +1519,9 @@ def action_update():
 
     int_pln_crp_id = validate_crop_id(dict_data)
 
+    # <PENDENTE>
+    # - Aplicar os demais campos
+
     Main.loading('Salvando dados, por favor aguarde...')
 
     # -------
@@ -1439,9 +1540,8 @@ def action_update():
 
     object_f3c1_plantation.update(dict_data)
 
-    # > Regras: Processo de complemento do objeto de dados, adicionando os parâmetros referente à cultura selecionada
-    dict_data_crop = get_data_crop_by_id(int_pln_crp_id)
-    dict_data['CRP_NAME'] = dict_data_crop['CRP_NAME']
+    # <PENDENTE>
+    # Salvar os demais campos
 
     print(format_data_view(dict_data = dict_data, bool_show_update_date = False))
 
@@ -1476,9 +1576,31 @@ def action_delete():
     object_f3c1_plantation = get_data_by_id(int_pln_id)
     dict_data = object_f3c1_plantation.get_one()
 
-    dict_data['PLN_STATUS'] = 0
+    dict_data['PLN_STATUS'] = F3C1Plantation.STATUS_DELETED
 
     object_f3c1_plantation.update(dict_data)
+
+    # ----------------------------------------------------------------
+    # Processo de exclusão dos parâmetros de configuração de irrigação
+    # ----------------------------------------------------------------
+
+    object_f3c1_plantation_config_irrigation = get_data_config_irrigation_by_id(int_pln_id, True)
+    dict_data_config_irrigation = object_f3c1_plantation_config_irrigation.get_one()
+
+    dict_data_config_irrigation['PCI_STATUS'] = F3C1PlantationConfigIrrigation.STATUS_DELETED
+
+    object_f3c1_plantation_config_irrigation.update(dict_data_config_irrigation)
+
+    # --------------------------------------------------
+    # Processo de exclusão dos parâmetros de localização
+    # --------------------------------------------------
+
+    object_f3c1_plantation_config_location = get_data_config_location_by_id(int_pln_id, True)
+    dict_data_config_location = object_f3c1_plantation_config_location.get_one()
+
+    dict_data_config_location['PCL_STATUS'] = F3C1PlantationConfigLocation.STATUS_DELETED
+
+    object_f3c1_plantation_config_location.update(dict_data_config_location)
 
     print('Registro excluído com sucesso.')
 
