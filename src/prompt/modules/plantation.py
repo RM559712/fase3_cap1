@@ -9,6 +9,8 @@ import prompt.main as Main
 import prompt.modules.crop as ModuleCrop
 from custom.helper import Helper
 from models.f3_c1_plantation import F3C1Plantation
+from models.f3_c1_plantation_config_irrigation import F3C1PlantationConfigIrrigation
+from models.f3_c1_plantation_config_location import F3C1PlantationConfigLocation
 
 """
 Método responsável pela exibição do cabeçalho do módulo
@@ -517,6 +519,562 @@ def validate_humidity(dict_data: dict = {}) -> dict:
 
 
 """
+Método responsável pela formatação de visualização da luminosidade do módulo "Plantações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_light(dict_data: dict = {}) -> str:
+
+    str_return = None
+    list_labels = []
+
+    if 'PCI_LIGHT_MIN' in dict_data and type(dict_data['PCI_LIGHT_MIN']) != None and Helper.is_float(dict_data['PCI_LIGHT_MIN']) == True:
+        list_labels.append(f'Mínimo de {dict_data['PCI_LIGHT_MIN']}%')
+
+    if 'PCI_LIGHT_MAX' in dict_data and type(dict_data['PCI_LIGHT_MAX']) != None and Helper.is_float(dict_data['PCI_LIGHT_MAX']) == True:
+        list_labels.append(f'Máximo de {dict_data['PCI_LIGHT_MAX']}%')
+
+    str_return = 'Umidade ideal: '
+    str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação dos parâmetros "luminosidade mínima" e "luminosidade máxima"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: dict
+"""
+def validate_light(dict_data: dict = {}) -> dict:
+
+    dict_return = {'pci_light_min': None, 'pci_light_max': None}
+
+    print('> Luminosidade')
+    print('A luminosidade será exibida no formato [valor] lux ( ex.: 12 lux, 21 lux, etc. )')
+    print('')
+
+    bool_is_update = ('CRP_ID' in dict_data and type(dict_data['CRP_ID']) == int)
+
+    if bool_is_update == True:
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_light(dict_data)}\n')
+
+    # ----------------
+    # Parâmetro mínimo
+    # ----------------
+
+    pci_light_min = input(f'Caso exista, informe a luminosidade mínima para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_light_min.strip() != '':
+
+                if ',' in pci_light_min:
+                    pci_light_min = pci_light_min.replace(',', '.')
+
+                if Helper.is_float(pci_light_min) == False and Helper.is_int(pci_light_min) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_light_min = input()
+
+    if pci_light_min.strip() != '':
+        dict_return['pci_light_min'] = float(pci_light_min)
+
+    # ----------------
+    # Parâmetro máximo
+    # ----------------
+
+    print('')
+
+    pci_light_max = input(f'Caso exista, informe a luminosidade máxima para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_light_max.strip() != '':
+
+                if ',' in pci_light_max:
+                    pci_light_max = pci_light_max.replace(',', '.')
+
+                if Helper.is_float(pci_light_max) == False and Helper.is_int(pci_light_max) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+                if type(dict_return['pci_light_min']) != type(None):
+
+                    if float(pci_light_max) <= dict_return['pci_light_min']:
+                        raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_light_max = input()
+
+    if pci_light_max.strip() != '':
+        dict_return['pci_light_max'] = float(pci_light_max)
+
+    return dict_return
+
+
+"""
+Método responsável pela formatação de visualização da radiação solar do módulo "Plantações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_radiation(dict_data: dict = {}) -> str:
+
+    str_return = None
+    list_labels = []
+
+    if 'PCI_RADIATION_MIN' in dict_data and type(dict_data['PCI_RADIATION_MIN']) != None and Helper.is_float(dict_data['PCI_RADIATION_MIN']) == True:
+        list_labels.append(f'Mínimo de {dict_data['PCI_RADIATION_MIN']}%')
+
+    if 'PCI_RADIATION_MAX' in dict_data and type(dict_data['PCI_RADIATION_MAX']) != None and Helper.is_float(dict_data['PCI_RADIATION_MAX']) == True:
+        list_labels.append(f'Máximo de {dict_data['PCI_RADIATION_MAX']}%')
+
+    str_return = 'Radiação solar ideal: '
+    str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação dos parâmetros "radiação solar mínima" e "radiação solar máxima"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: dict
+"""
+def validate_radiation(dict_data: dict = {}) -> dict:
+
+    dict_return = {'pci_radiation_min': None, 'pci_radiation_max': None}
+
+    print('> Radiação solar')
+    print('A radiação solar será exibida no formato [valor] W/m² ( ex.: 12 W/m², 21 W/m², etc. )')
+    print('')
+
+    bool_is_update = ('CRP_ID' in dict_data and type(dict_data['CRP_ID']) == int)
+
+    if bool_is_update == True:
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_radiation(dict_data)}\n')
+
+    # ----------------
+    # Parâmetro mínimo
+    # ----------------
+
+    pci_radiation_min = input(f'Caso exista, informe a radiação solar mínima para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_radiation_min.strip() != '':
+
+                if ',' in pci_radiation_min:
+                    pci_radiation_min = pci_radiation_min.replace(',', '.')
+
+                if Helper.is_float(pci_radiation_min) == False and Helper.is_int(pci_radiation_min) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_radiation_min = input()
+
+    if pci_radiation_min.strip() != '':
+        dict_return['pci_radiation_min'] = float(pci_radiation_min)
+
+    # ----------------
+    # Parâmetro máximo
+    # ----------------
+
+    print('')
+
+    pci_radiation_max = input(f'Caso exista, informe a radiação solar máxima para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_radiation_max.strip() != '':
+
+                if ',' in pci_radiation_max:
+                    pci_radiation_max = pci_radiation_max.replace(',', '.')
+
+                if Helper.is_float(pci_radiation_max) == False and Helper.is_int(pci_radiation_max) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+                if type(dict_return['pci_radiation_min']) != type(None):
+
+                    if float(pci_radiation_max) <= dict_return['pci_radiation_min']:
+                        raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_radiation_max = input()
+
+    if pci_radiation_max.strip() != '':
+        dict_return['pci_radiation_max'] = float(pci_radiation_max)
+
+    return dict_return
+
+
+"""
+Método responsável pela formatação de visualização da salinidade do módulo "Plantações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_salinity(dict_data: dict = {}) -> str:
+
+    str_return = None
+    list_labels = []
+
+    if 'PCI_SALINITY_MIN' in dict_data and type(dict_data['PCI_SALINITY_MIN']) != None and Helper.is_float(dict_data['PCI_SALINITY_MIN']) == True:
+        list_labels.append(f'Mínimo de {dict_data['PCI_SALINITY_MIN']}%')
+
+    if 'PCI_SALINITY_MAX' in dict_data and type(dict_data['PCI_SALINITY_MAX']) != None and Helper.is_float(dict_data['PCI_SALINITY_MAX']) == True:
+        list_labels.append(f'Máximo de {dict_data['PCI_SALINITY_MAX']}%')
+
+    str_return = 'Salinidade ideal: '
+    str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação dos parâmetros "salinidade mínima" e "salinidade máxima"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: dict
+"""
+def validate_salinity(dict_data: dict = {}) -> dict:
+
+    dict_return = {'pci_salinity_min': None, 'pci_salinity_max': None}
+
+    print('> Salinidade')
+    print('A salinidade será exibida no formato [valor] dS/m ( ex.: 12 dS/m, 21 dS/m, etc. )')
+    print('')
+
+    bool_is_update = ('CRP_ID' in dict_data and type(dict_data['CRP_ID']) == int)
+
+    if bool_is_update == True:
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_salinity(dict_data)}\n')
+
+    # ----------------
+    # Parâmetro mínimo
+    # ----------------
+
+    pci_salinity_min = input(f'Caso exista, informe a salinidade mínima para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_salinity_min.strip() != '':
+
+                if ',' in pci_salinity_min:
+                    pci_salinity_min = pci_salinity_min.replace(',', '.')
+
+                if Helper.is_float(pci_salinity_min) == False and Helper.is_int(pci_salinity_min) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_salinity_min = input()
+
+    if pci_salinity_min.strip() != '':
+        dict_return['pci_salinity_min'] = float(pci_salinity_min)
+
+    # ----------------
+    # Parâmetro máximo
+    # ----------------
+
+    print('')
+
+    pci_salinity_max = input(f'Caso exista, informe a salinidade máxima para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_salinity_max.strip() != '':
+
+                if ',' in pci_salinity_max:
+                    pci_salinity_max = pci_salinity_max.replace(',', '.')
+
+                if Helper.is_float(pci_salinity_max) == False and Helper.is_int(pci_salinity_max) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+                if type(dict_return['pci_salinity_min']) != type(None):
+
+                    if float(pci_salinity_max) <= dict_return['pci_salinity_min']:
+                        raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_salinity_max = input()
+
+    if pci_salinity_max.strip() != '':
+        dict_return['pci_salinity_max'] = float(pci_salinity_max)
+
+    return dict_return
+
+
+"""
+Método responsável pela formatação de visualização do pH do módulo "Plantações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_ph(dict_data: dict = {}) -> str:
+
+    str_return = None
+    list_labels = []
+
+    if 'PCI_PH_MIN' in dict_data and type(dict_data['PCI_PH_MIN']) != None and Helper.is_float(dict_data['PCI_PH_MIN']) == True:
+        list_labels.append(f'Mínimo de {dict_data['PCI_PH_MIN']}%')
+
+    if 'PCI_PH_MAX' in dict_data and type(dict_data['PCI_PH_MAX']) != None and Helper.is_float(dict_data['PCI_PH_MAX']) == True:
+        list_labels.append(f'Máximo de {dict_data['PCI_PH_MAX']}%')
+
+    str_return = 'pH ideal: '
+    str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação dos parâmetros "pH mínimo" e "pH máximo"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: dict
+"""
+def validate_ph(dict_data: dict = {}) -> dict:
+
+    dict_return = {'pci_ph_min': None, 'pci_ph_max': None}
+
+    print('> pH')
+    print('O pH será exibido no formato [valor] ( ex.: 12, 21, etc. )')
+    print('')
+
+    bool_is_update = ('CRP_ID' in dict_data and type(dict_data['CRP_ID']) == int)
+
+    if bool_is_update == True:
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_ph(dict_data)}\n')
+
+    # ----------------
+    # Parâmetro mínimo
+    # ----------------
+
+    pci_ph_min = input(f'Caso exista, informe o pH mínimo para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_ph_min.strip() != '':
+
+                if ',' in pci_ph_min:
+                    pci_ph_min = pci_ph_min.replace(',', '.')
+
+                if Helper.is_float(pci_ph_min) == False and Helper.is_int(pci_ph_min) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_ph_min = input()
+
+    if pci_ph_min.strip() != '':
+        dict_return['pci_ph_min'] = float(pci_ph_min)
+
+    # ----------------
+    # Parâmetro máximo
+    # ----------------
+
+    print('')
+
+    pci_ph_max = input(f'Caso exista, informe o pH máximo para plantio em formato numérico ( ex.: 123, 123.45 ou 123,45 ): ')
+
+    while True:
+
+        try:
+
+            if pci_ph_max.strip() != '':
+
+                if ',' in pci_ph_max:
+                    pci_ph_max = pci_ph_max.replace(',', '.')
+
+                if Helper.is_float(pci_ph_max) == False and Helper.is_int(pci_ph_max) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+                if type(dict_return['pci_ph_min']) != type(None):
+
+                    if float(pci_ph_max) <= dict_return['pci_ph_min']:
+                        raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            pci_ph_max = input()
+
+    if pci_ph_max.strip() != '':
+        dict_return['pci_ph_max'] = float(pci_ph_max)
+
+    return dict_return
+
+
+"""
+Método responsável pela formatação de visualização da latitude do módulo "Plantações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_latitude(dict_data: dict = {}) -> str:
+
+    str_return = 'Latitude: '
+    str_return += f'{dict_data['PCL_LATITUDE'].strip()}' if 'PCL_LATITUDE' in dict_data and type(dict_data['PCL_LATITUDE']) != None and type(dict_data['PCL_LATITUDE']) == str else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação do parâmetro "Latitude"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def validate_latitude(dict_data: dict = {}) -> float:
+
+    bool_is_update = ('PLN_ID' in dict_data and type(dict_data['PLN_ID']) == int)
+
+    str_label = f'Importante: Caso deseje manter a latitude atual ( abaixo ), basta ignorar o preenchimento.\n{format_data_view_latitude(dict_data)}\n' if bool_is_update == True else ''
+    str_label += f'Informe a latitude da plantação em formato numérico ( ex.: 123, 123.45 ou 123,45 ): '
+    float_return = input(f'{str_label}')
+
+    while True:
+
+        try:
+
+            if float_return.strip() != '':
+
+                if ',' in float_return:
+                    float_return = float_return.replace(',', '.')
+
+                if Helper.is_float(float_return) == False and Helper.is_int(float_return) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            float_return = input()
+
+    return float(float_return) if float_return.strip() != '' else 0.00
+
+
+"""
+Método responsável pela formatação de visualização da longitude do módulo "Plantações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_longitude(dict_data: dict = {}) -> str:
+
+    str_return = 'Longitude: '
+    str_return += f'{dict_data['PCL_LONGITUDE'].strip()}' if 'PCL_LONGITUDE' in dict_data and type(dict_data['PCL_LONGITUDE']) != None and type(dict_data['PCL_LONGITUDE']) == str else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação do parâmetro "Longitude"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def validate_longitude(dict_data: dict = {}) -> float:
+
+    bool_is_update = ('PLN_ID' in dict_data and type(dict_data['PLN_ID']) == int)
+
+    str_label = f'Importante: Caso deseje manter a longitude atual ( abaixo ), basta ignorar o preenchimento.\n{format_data_view_longitude(dict_data)}\n' if bool_is_update == True else ''
+    str_label += f'Informe a longitude da plantação em formato numérico ( ex.: 123, 123.45 ou 123,45 ): '
+    float_return = input(f'{str_label}')
+
+    while True:
+
+        try:
+
+            if float_return.strip() != '':
+
+                if ',' in float_return:
+                    float_return = float_return.replace(',', '.')
+
+                if Helper.is_float(float_return) == False and Helper.is_int(float_return) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            float_return = input()
+
+    return float(float_return) if float_return.strip() != '' else 0.00
+
+
+"""
 Método responsável pela formatação de visualização da data de cadastro do módulo "Plantações"
 
 Arguments:
@@ -569,6 +1127,14 @@ def format_data_view(dict_data: dict = {}, bool_show_id: bool = True, bool_show_
         str_return += f'- {format_data_view_id(dict_data)} \n' if bool_show_id == True else ''
         str_return += f'- {format_data_view_name(dict_data)} \n'
         str_return += f'- {ModuleCrop.format_data_view_name(dict_data)} \n'
+        str_return += f'- {format_data_view_temp(dict_data)} \n'
+        str_return += f'- {format_data_view_humidity(dict_data)} \n'
+        str_return += f'- {format_data_view_light(dict_data)} \n'
+        str_return += f'- {format_data_view_radiation(dict_data)} \n'
+        str_return += f'- {format_data_view_salinity(dict_data)} \n'
+        str_return += f'- {format_data_view_ph(dict_data)} \n'
+        str_return += f'- {format_data_view_latitude(dict_data)} \n'
+        str_return += f'- {format_data_view_longitude(dict_data)} \n'
         str_return += f'- {format_data_view_insert_date(dict_data)} \n' if bool_show_insert_date == True else ''
         str_return += f'- {format_data_view_update_date(dict_data)} \n' if bool_show_update_date == True else ''
 
@@ -588,11 +1154,12 @@ def action_list():
 
     object_f3c1_plantation = F3C1Plantation()
 
-    object_f3c1_plantation.set_select(['PLN.*', 'CRP.CRP_NAME', 'PCI.*'])
+    object_f3c1_plantation.set_select(['PLN.*', 'CRP.CRP_NAME', 'PCI.*', 'PCL.*'])
     object_f3c1_plantation.set_table('F3_C1_PLANTATION PLN')
     object_f3c1_plantation.set_join([
         {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_CROP CRP', 'str_where': 'CRP.CRP_ID = PLN.PLN_CRP_ID'},
-        {'str_type_join': 'LEFT JOIN', 'str_table': 'F3_C1_PLANTATION_CONFIG_IRRIGATION PCI', 'str_where': 'PCI.PCI_PLN_ID = PLN.PLN_ID'}
+        {'str_type_join': 'LEFT JOIN', 'str_table': 'F3_C1_PLANTATION_CONFIG_IRRIGATION PCI', 'str_where': 'PCI.PCI_PLN_ID = PLN.PLN_ID'},
+        {'str_type_join': 'LEFT JOIN', 'str_table': 'F3_C1_PLANTATION_CONFIG_LOCATION PCL', 'str_where': 'PCL.PCL_PLN_ID = PLN.PLN_ID'}
     ])
     object_f3c1_plantation.set_where([F3C1Plantation.get_params_to_active_data()])
     object_f3c1_plantation.set_order([{'str_column': 'PLN.PLN_ID', 'str_type_order': 'ASC'}])
@@ -612,11 +1179,12 @@ def get_data_by_id(int_pln_id: int = 0) -> dict:
 
     object_f3c1_plantation = F3C1Plantation()
 
-    object_f3c1_plantation.set_select(['PLN.*', 'CRP.CRP_NAME', 'PCI.*'])
+    object_f3c1_plantation.set_select(['PLN.*', 'CRP.CRP_NAME', 'PCI.*', 'PCL.*'])
     object_f3c1_plantation.set_table('F3_C1_PLANTATION PLN')
     object_f3c1_plantation.set_join([
         {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_CROP CRP', 'str_where': 'CRP.CRP_ID = PLN.PLN_CRP_ID'},
-        {'str_type_join': 'LEFT JOIN', 'str_table': 'F3_C1_PLANTATION_CONFIG_IRRIGATION PCI', 'str_where': 'PCI.PCI_PLN_ID = PLN.PLN_ID'}
+        {'str_type_join': 'LEFT JOIN', 'str_table': 'F3_C1_PLANTATION_CONFIG_IRRIGATION PCI', 'str_where': 'PCI.PCI_PLN_ID = PLN.PLN_ID'},
+        {'str_type_join': 'LEFT JOIN', 'str_table': 'F3_C1_PLANTATION_CONFIG_LOCATION PCL', 'str_where': 'PCL.PCL_PLN_ID = PLN.PLN_ID'}
     ])
     object_f3c1_plantation.set_where([
 
@@ -673,7 +1241,7 @@ def action_insert():
 
     show_head_module()
 
-    print('Os próximos parâmetros fazem parte da configuração da plantação para que o sistema automático de irrigação seja executado e não são obrigatórios.')
+    print('Os próximos parâmetros fazem parte da configuração para que o sistema automático de irrigação seja executado. O preenchimento não é obrigatório.')
     input(f'\nPressione <enter> para continuar...')
 
     # -------
@@ -696,14 +1264,74 @@ def action_insert():
 
     dict_humidity = validate_humidity()
 
-    
+    # -------
+    # Etapa 5
+    # -------
 
-    # <PENDENTE>
-    # Fazer os demais parâmetros
+    Main.init_step()
+
+    show_head_module()
+
+    dict_light = validate_light()
 
     # -------
-    # Etapa 
+    # Etapa 6
     # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_radiation = validate_radiation()
+
+    # -------
+    # Etapa 7
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_salinity = validate_salinity()
+
+    # -------
+    # Etapa 8
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_ph = validate_ph()
+
+    # -------
+    # Etapa 9
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    print('Os próximos parâmetros fazem parte da localização geográfica da plantação. O preenchimento não é obrigatório.')
+    input(f'\nPressione <enter> para continuar...')
+
+    # --------
+    # Etapa 10
+    # --------
+
+    Main.init_step()
+
+    show_head_module()
+
+    float_latitude = validate_latitude()
+
+    print('')
+
+    float_longitude = validate_longitude()
+
+    # --------
+    # Etapa 11
+    # --------
 
     Main.init_step()
 
@@ -719,16 +1347,22 @@ def action_insert():
     object_f3c1_plantation = F3C1Plantation()
     object_f3c1_plantation.insert(dict_data)
 
-    # <PENDENTE>
-    # - Retornar o ID cadastrado
-    #print(object_f3c1_plantation.get_last_id())
+    int_pln_id = object_f3c1_plantation.get_last_id()
 
     # <PENDENTE>
     # - Cadastrar as configurações adicionais da plantação caso exista
 
-    # > Regras: Processo de complemento do objeto de dados, adicionando os parâmetros referente à cultura selecionada
-    dict_data_crop = get_data_crop_by_id(int_pln_crp_id)
-    dict_data['CRP_NAME'] = dict_data_crop['CRP_NAME']
+    # ---------------------------------------------------
+    # Processo de cadastro dos parâmetros de configuração
+    # ---------------------------------------------------
+
+    
+
+    # --------------------------------------------------
+    # Processo de cadastro dos parâmetros de localização
+    # --------------------------------------------------
+
+
 
     print(format_data_view(dict_data = dict_data, bool_show_id = False, bool_show_insert_date = False, bool_show_update_date = False))
 
