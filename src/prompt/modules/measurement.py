@@ -7,6 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 
 import prompt.main as Main
 import prompt.modules.sensor as ModuleSensor
+import prompt.modules.plantation as ModulePlantation
 from custom.helper import Helper
 from models.f3_c1_measurement import F3C1Measurement
 
@@ -181,6 +182,46 @@ def validate_id() -> int:
 
 
 """
+Método responsável pela validação do parâmetro "Plantação"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def validate_plantation_id(dict_data: dict = {}) -> int:
+
+    bool_is_update = ('MSM_ID' in dict_data and type(dict_data['MSM_ID']) == int)
+
+    str_label = f'Importante: Caso deseje manter a plantação atual ( abaixo ), basta ignorar o preenchimento.\n{ModulePlantation.format_data_view_name(dict_data)}\n' if bool_is_update == True else ''
+    str_label += f'Informe a plantação: '
+    int_return = input(f'{str_label}')
+
+    while True:
+
+        try:
+
+            if bool_is_update == False and int_return.strip() == '':
+                raise Exception('Deve ser informada uma plantação válida.')
+
+            if int_return.strip() != '' and Helper.is_int(int_return) == False: 
+                raise Exception('O conteúdo informado deve ser numérico.')
+
+            if Helper.is_int(int_return) == True:
+
+                get_data_plantation_by_id(int_return)
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            int_return = input()
+
+    return str(int_return.strip())
+
+
+"""
 Método responsável pela validação do parâmetro "Sensor"
 
 Arguments:
@@ -326,6 +367,7 @@ def format_data_view(dict_data: dict = {}, bool_show_id: bool = True, bool_show_
 
         str_return = ''
         str_return += f'- {format_data_view_id(dict_data)} \n' if bool_show_id == True else ''
+        str_return += f'- {ModulePlantation.format_data_view_name(dict_data)} \n'
         str_return += f'- {ModuleSensor.format_data_view_name(dict_data)} \n'
         str_return += f'- {format_data_view_value(dict_data)} \n'
         str_return += f'- {format_data_view_insert_date(dict_data)} \n' if bool_show_insert_date == True else ''
@@ -347,9 +389,10 @@ def action_list():
 
     object_f3c1_measurement = F3C1Measurement()
 
-    object_f3c1_measurement.set_select(['MSM.*', 'SNS.SNS_NAME'])
+    object_f3c1_measurement.set_select(['MSM.*', 'PLN.PLN_NAME', 'SNS.SNS_NAME'])
     object_f3c1_measurement.set_table('F3_C1_MEASUREMENT MSM')
     object_f3c1_measurement.set_join([
+        {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_PLANTATION PLN', 'str_where': 'PLN.PLN_ID = MSM.MSM_PLN_ID'},
         {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_SENSOR SNS', 'str_where': 'SNS.SNS_ID = MSM.MSM_SNS_ID'}
     ])
     object_f3c1_measurement.set_where([F3C1Measurement.get_params_to_active_data()])
@@ -370,9 +413,10 @@ def get_data_by_id(int_msm_id: int = 0) -> dict:
 
     object_f3c1_measurement = F3C1Measurement()
 
-    object_f3c1_measurement.set_select(['MSM.*', 'SNS.SNS_NAME'])
+    object_f3c1_measurement.set_select(['MSM.*', 'PLN.PLN_NAME', 'SNS.SNS_NAME'])
     object_f3c1_measurement.set_table('F3_C1_MEASUREMENT MSM')
     object_f3c1_measurement.set_join([
+        {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_PLANTATION PLN', 'str_where': 'PLN.PLN_ID = MSM.MSM_PLN_ID'},
         {'str_type_join': 'INNER JOIN', 'str_table': 'F3_C1_SENSOR SNS', 'str_where': 'SNS.SNS_ID = MSM.MSM_SNS_ID'}
     ])
     object_f3c1_measurement.set_where([
@@ -391,7 +435,18 @@ def get_data_by_id(int_msm_id: int = 0) -> dict:
 
 
 """
-Método responsável por executar a ação de retorno de dados de uma determinada cultura
+Método responsável por executar a ação de retorno de dados de uma determinada plantação
+"""
+def get_data_plantation_by_id(pln_id: int = 0) -> dict:
+
+    object_f3c1_plantation = ModulePlantation.get_data_by_id(pln_id)
+    dict_data = object_f3c1_plantation.get_one()
+
+    return dict_data
+
+
+"""
+Método responsável por executar a ação de retorno de dados de um determinado sensor
 """
 def get_data_sensor_by_id(sns_id: int = 0) -> dict:
 
@@ -416,11 +471,18 @@ def action_insert():
     print('Os parâmetros abaixo fazem parte do cadastro principal da medição.')
     print('')
 
+    int_msm_pln_id = validate_plantation_id()
+
+    print('')
+
     int_msm_sns_id = validate_sensor_id()
 
     print('')
 
     float_msm_value = validate_value()
+
+    # <PENDENTE>
+    # - Execução da validação para iniciar uma irrigação automática
 
     Main.loading('Salvando dados, por favor aguarde...')
 
@@ -434,6 +496,7 @@ def action_insert():
 
     dict_data = {}
 
+    dict_data['MSM_PLN_ID'] = int_msm_pln_id
     dict_data['MSM_SNS_ID'] = int_msm_sns_id
     dict_data['MSM_VALUE'] = float_msm_value
 
@@ -497,6 +560,10 @@ def action_update():
     print('Os parâmetros abaixo fazem parte do cadastro principal da medição.')
     print('')
 
+    int_msm_pln_id = validate_plantation_id(dict_data)
+
+    print('')
+
     int_msm_sns_id = validate_sensor_id(dict_data)
 
     print('')
@@ -513,11 +580,9 @@ def action_update():
 
     show_head_module()
 
-    if int_msm_sns_id.strip() != '':
-        dict_data['MSM_SNS_ID'] = int_msm_sns_id
-
-    if Helper.is_float(float_msm_value) == True:
-        dict_data['MSM_VALUE'] = float_msm_value
+    dict_data['MSM_PLN_ID'] = int_msm_pln_id
+    dict_data['MSM_SNS_ID'] = int_msm_sns_id
+    dict_data['MSM_VALUE'] = float_msm_value
 
     object_f3c1_measurement.update(dict_data)
 
