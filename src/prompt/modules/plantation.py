@@ -338,7 +338,7 @@ def validate_temp(dict_data: dict = {}) -> dict:
     print('')
 
     if bool_is_update == True:
-        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_temp(dict_data)}\n')
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos. Caso queira apagar o valor, digite "none".\n{format_data_view_temp(dict_data)}\n')
 
     # ----------------
     # Parâmetro mínimo
@@ -350,7 +350,7 @@ def validate_temp(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_temp_min.strip() != '':
+            if pci_temp_min.strip() != '' and pci_temp_min.strip().lower() != 'none':
 
                 if ',' in pci_temp_min:
                     pci_temp_min = pci_temp_min.replace(',', '.')
@@ -365,7 +365,7 @@ def validate_temp(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_temp_min = input()
 
-    if pci_temp_min.strip() != '':
+    if pci_temp_min.strip() != '' and pci_temp_min.strip().lower() != 'none':
         dict_return['pci_temp_min'] = float(pci_temp_min)
 
     # ----------------
@@ -380,7 +380,7 @@ def validate_temp(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_temp_max.strip() != '':
+            if pci_temp_max.strip() != '' and pci_temp_max.strip().lower() != 'none':
 
                 if ',' in pci_temp_max:
                     pci_temp_max = pci_temp_max.replace(',', '.')
@@ -400,7 +400,7 @@ def validate_temp(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_temp_max = input()
 
-    if pci_temp_max.strip() != '':
+    if pci_temp_max.strip() != '' and pci_temp_max.strip().lower() != 'none':
         dict_return['pci_temp_max'] = float(pci_temp_max)
 
     return dict_return
@@ -447,10 +447,10 @@ def validate_humidity(dict_data: dict = {}) -> dict:
     print('A umidade será exibida no formato [valor]% ( ex.: 12%, 21%, etc. )')
     print('')
 
-    bool_is_update = ('CRP_ID' in dict_data and type(dict_data['CRP_ID']) == int)
+    bool_is_update = ('PLN_ID' in dict_data and type(dict_data['PLN_ID']) == int)
 
     if bool_is_update == True:
-        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_humidity(dict_data)}\n')
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos. Caso queira apagar o valor, digite "none".\n{format_data_view_humidity(dict_data)}\n')
 
     # ----------------
     # Parâmetro mínimo
@@ -462,7 +462,7 @@ def validate_humidity(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_humidity_min.strip() != '':
+            if pci_humidity_min.strip() != '' and pci_humidity_min.strip().lower() != 'none':
 
                 if ',' in pci_humidity_min:
                     pci_humidity_min = pci_humidity_min.replace(',', '.')
@@ -477,7 +477,7 @@ def validate_humidity(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_humidity_min = input()
 
-    if pci_humidity_min.strip() != '':
+    if pci_humidity_min.strip() != '' and pci_humidity_min.strip().lower() != 'none':
         dict_return['pci_humidity_min'] = float(pci_humidity_min)
 
     # ----------------
@@ -492,7 +492,7 @@ def validate_humidity(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_humidity_max.strip() != '':
+            if pci_humidity_max.strip() != '' and pci_humidity_max.strip().lower() != 'none':
 
                 if ',' in pci_humidity_max:
                     pci_humidity_max = pci_humidity_max.replace(',', '.')
@@ -512,7 +512,7 @@ def validate_humidity(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_humidity_max = input()
 
-    if pci_humidity_max.strip() != '':
+    if pci_humidity_max.strip() != '' and pci_humidity_max.strip().lower() != 'none':
         dict_return['pci_humidity_max'] = float(pci_humidity_max)
 
     return dict_return
@@ -537,7 +537,7 @@ def format_data_view_light(dict_data: dict = {}) -> str:
     if 'PCI_LIGHT_MAX' in dict_data and type(dict_data['PCI_LIGHT_MAX']) != None and Helper.is_float(dict_data['PCI_LIGHT_MAX']) == True:
         list_labels.append(f'Máximo de {dict_data['PCI_LIGHT_MAX']}%')
 
-    str_return = 'Umidade ideal: '
+    str_return = 'Luminosidade ideal: '
     str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'
 
     return str_return
@@ -559,10 +559,10 @@ def validate_light(dict_data: dict = {}) -> dict:
     print('A luminosidade será exibida no formato [valor] lux ( ex.: 12 lux, 21 lux, etc. )')
     print('')
 
-    bool_is_update = ('CRP_ID' in dict_data and type(dict_data['CRP_ID']) == int)
+    bool_is_update = ('PLN_ID' in dict_data and type(dict_data['PLN_ID']) == int)
 
     if bool_is_update == True:
-        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_light(dict_data)}\n')
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos. Caso queira apagar o valor, digite "none".\n{format_data_view_light(dict_data)}\n')
 
     # ----------------
     # Parâmetro mínimo
@@ -574,7 +574,7 @@ def validate_light(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_light_min.strip() != '':
+            if pci_light_min.strip() != '' and pci_light_min.strip().lower() != 'none':
 
                 if ',' in pci_light_min:
                     pci_light_min = pci_light_min.replace(',', '.')
@@ -589,7 +589,7 @@ def validate_light(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_light_min = input()
 
-    if pci_light_min.strip() != '':
+    if pci_light_min.strip() != '' and pci_light_min.strip().lower() != 'none':
         dict_return['pci_light_min'] = float(pci_light_min)
 
     # ----------------
@@ -604,7 +604,7 @@ def validate_light(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_light_max.strip() != '':
+            if pci_light_max.strip() != '' and pci_light_max.strip().lower() != 'none':
 
                 if ',' in pci_light_max:
                     pci_light_max = pci_light_max.replace(',', '.')
@@ -624,7 +624,7 @@ def validate_light(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_light_max = input()
 
-    if pci_light_max.strip() != '':
+    if pci_light_max.strip() != '' and pci_light_max.strip().lower() != 'none':
         dict_return['pci_light_max'] = float(pci_light_max)
 
     return dict_return
@@ -671,10 +671,10 @@ def validate_radiation(dict_data: dict = {}) -> dict:
     print('A radiação solar será exibida no formato [valor] W/m² ( ex.: 12 W/m², 21 W/m², etc. )')
     print('')
 
-    bool_is_update = ('CRP_ID' in dict_data and type(dict_data['CRP_ID']) == int)
+    bool_is_update = ('PLN_ID' in dict_data and type(dict_data['PLN_ID']) == int)
 
     if bool_is_update == True:
-        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_radiation(dict_data)}\n')
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos. Caso queira apagar o valor, digite "none".\n{format_data_view_radiation(dict_data)}\n')
 
     # ----------------
     # Parâmetro mínimo
@@ -686,7 +686,7 @@ def validate_radiation(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_radiation_min.strip() != '':
+            if pci_radiation_min.strip() != '' and pci_radiation_min.strip().lower() != 'none':
 
                 if ',' in pci_radiation_min:
                     pci_radiation_min = pci_radiation_min.replace(',', '.')
@@ -701,7 +701,7 @@ def validate_radiation(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_radiation_min = input()
 
-    if pci_radiation_min.strip() != '':
+    if pci_radiation_min.strip() != '' and pci_radiation_min.strip().lower() != 'none':
         dict_return['pci_radiation_min'] = float(pci_radiation_min)
 
     # ----------------
@@ -716,7 +716,7 @@ def validate_radiation(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_radiation_max.strip() != '':
+            if pci_radiation_max.strip() != '' and pci_radiation_max.strip().lower() != 'none':
 
                 if ',' in pci_radiation_max:
                     pci_radiation_max = pci_radiation_max.replace(',', '.')
@@ -736,7 +736,7 @@ def validate_radiation(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_radiation_max = input()
 
-    if pci_radiation_max.strip() != '':
+    if pci_radiation_max.strip() != '' and pci_radiation_max.strip().lower() != 'none':
         dict_return['pci_radiation_max'] = float(pci_radiation_max)
 
     return dict_return
@@ -783,10 +783,10 @@ def validate_salinity(dict_data: dict = {}) -> dict:
     print('A salinidade será exibida no formato [valor] dS/m ( ex.: 12 dS/m, 21 dS/m, etc. )')
     print('')
 
-    bool_is_update = ('CRP_ID' in dict_data and type(dict_data['CRP_ID']) == int)
+    bool_is_update = ('PLN_ID' in dict_data and type(dict_data['PLN_ID']) == int)
 
     if bool_is_update == True:
-        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_salinity(dict_data)}\n')
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos. Caso queira apagar o valor, digite "none".\n{format_data_view_salinity(dict_data)}\n')
 
     # ----------------
     # Parâmetro mínimo
@@ -798,7 +798,7 @@ def validate_salinity(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_salinity_min.strip() != '':
+            if pci_salinity_min.strip() != '' and pci_salinity_min.strip().lower() != 'none':
 
                 if ',' in pci_salinity_min:
                     pci_salinity_min = pci_salinity_min.replace(',', '.')
@@ -813,7 +813,7 @@ def validate_salinity(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_salinity_min = input()
 
-    if pci_salinity_min.strip() != '':
+    if pci_salinity_min.strip() != '' and pci_salinity_min.strip().lower() != 'none':
         dict_return['pci_salinity_min'] = float(pci_salinity_min)
 
     # ----------------
@@ -828,7 +828,7 @@ def validate_salinity(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_salinity_max.strip() != '':
+            if pci_salinity_max.strip() != '' and pci_salinity_max.strip().lower() != 'none':
 
                 if ',' in pci_salinity_max:
                     pci_salinity_max = pci_salinity_max.replace(',', '.')
@@ -848,7 +848,7 @@ def validate_salinity(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_salinity_max = input()
 
-    if pci_salinity_max.strip() != '':
+    if pci_salinity_max.strip() != '' and pci_salinity_max.strip().lower() != 'none':
         dict_return['pci_salinity_max'] = float(pci_salinity_max)
 
     return dict_return
@@ -895,10 +895,10 @@ def validate_ph(dict_data: dict = {}) -> dict:
     print('O pH será exibido no formato [valor] ( ex.: 12, 21, etc. )')
     print('')
 
-    bool_is_update = ('CRP_ID' in dict_data and type(dict_data['CRP_ID']) == int)
+    bool_is_update = ('PLN_ID' in dict_data and type(dict_data['PLN_ID']) == int)
 
     if bool_is_update == True:
-        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos.\n{format_data_view_ph(dict_data)}\n')
+        print(f'Importante: Caso deseje manter os valores atuais ( abaixo ), basta ignorar os preenchimentos. Caso queira apagar o valor, digite "none".\n{format_data_view_ph(dict_data)}\n')
 
     # ----------------
     # Parâmetro mínimo
@@ -910,7 +910,7 @@ def validate_ph(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_ph_min.strip() != '':
+            if pci_ph_min.strip() != '' and pci_ph_min.strip().lower() != 'none':
 
                 if ',' in pci_ph_min:
                     pci_ph_min = pci_ph_min.replace(',', '.')
@@ -925,7 +925,7 @@ def validate_ph(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_ph_min = input()
 
-    if pci_ph_min.strip() != '':
+    if pci_ph_min.strip() != '' and pci_ph_min.strip().lower() != 'none':
         dict_return['pci_ph_min'] = float(pci_ph_min)
 
     # ----------------
@@ -940,7 +940,7 @@ def validate_ph(dict_data: dict = {}) -> dict:
 
         try:
 
-            if pci_ph_max.strip() != '':
+            if pci_ph_max.strip() != '' and pci_ph_max.strip().lower() != 'none':
 
                 if ',' in pci_ph_max:
                     pci_ph_max = pci_ph_max.replace(',', '.')
@@ -960,7 +960,7 @@ def validate_ph(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_ph_max = input()
 
-    if pci_ph_max.strip() != '':
+    if pci_ph_max.strip() != '' and pci_ph_max.strip().lower() != 'none':
         dict_return['pci_ph_max'] = float(pci_ph_max)
 
     return dict_return
@@ -1002,7 +1002,7 @@ def validate_latitude(dict_data: dict = {}) -> float:
 
         try:
 
-            if float_return.strip() != '':
+            if float_return.strip() != '' and float_return.strip().lower() != 'none':
 
                 if ',' in float_return:
                     float_return = float_return.replace(',', '.')
@@ -1017,7 +1017,7 @@ def validate_latitude(dict_data: dict = {}) -> float:
             print(f'{error} Tente novamente: ', end = '')
             float_return = input()
 
-    return float(float_return) if float_return.strip() != '' else 0.00
+    return float(float_return) if float_return.strip() != '' and float_return.strip().lower() != 'none' else 0.00
 
 
 """
@@ -1056,7 +1056,7 @@ def validate_longitude(dict_data: dict = {}) -> float:
 
         try:
 
-            if float_return.strip() != '':
+            if float_return.strip() != '' and float_return.strip().lower() != 'none':
 
                 if ',' in float_return:
                     float_return = float_return.replace(',', '.')
@@ -1071,7 +1071,7 @@ def validate_longitude(dict_data: dict = {}) -> float:
             print(f'{error} Tente novamente: ', end = '')
             float_return = input()
 
-    return float(float_return) if float_return.strip() != '' else 0.00
+    return float(float_return) if float_return.strip() != '' and float_return.strip().lower() != 'none' else 0.00
 
 
 """
@@ -1204,7 +1204,7 @@ def get_data_by_id(int_pln_id: int = 0) -> dict:
 """
 Método responsável por executar a ação de retorno de dados de configurações de irrigação uma determinada plantação
 """
-def get_data_config_irrigation_by_id(int_pln_id: int = 0, bool_create_new: bool = True) -> dict:
+def get_data_config_irrigation_by_id(int_pln_id: int = 0) -> dict:
 
     object_f3c1_plantation_config_irrigation = F3C1PlantationConfigIrrigation()
 
@@ -1217,11 +1217,8 @@ def get_data_config_irrigation_by_id(int_pln_id: int = 0, bool_create_new: bool 
 
     dict_data = object_f3c1_plantation_config_irrigation.get_data().get_one()
 
-    if type(dict_data) == type(None) and bool_create_new == True:
-
-        object_f3c1_plantation_config_irrigation.insert({'PCI_PLN_ID': int_pln_id})
-
-        return get_data_config_irrigation_by_id(int_pln_id)
+    if type(dict_data) == type(None):
+        raise Exception(f'Nenhum registro de configuração de irrigação foi localizado com o ID {int_pln_id}.')
 
     return object_f3c1_plantation_config_irrigation
 
@@ -1229,7 +1226,7 @@ def get_data_config_irrigation_by_id(int_pln_id: int = 0, bool_create_new: bool 
 """
 Método responsável por executar a ação de retorno de dados de localização uma determinada plantação
 """
-def get_data_config_location_by_id(int_pln_id: int = 0, bool_create_new: bool = True) -> dict:
+def get_data_config_location_by_id(int_pln_id: int = 0) -> dict:
 
     object_f3c1_plantation_config_location = F3C1PlantationConfigLocation()
 
@@ -1242,11 +1239,8 @@ def get_data_config_location_by_id(int_pln_id: int = 0, bool_create_new: bool = 
 
     dict_data = object_f3c1_plantation_config_location.get_data().get_one()
 
-    if type(dict_data) == type(None) and bool_create_new == True:
-
-        object_f3c1_plantation_config_location.insert({'PCL_PLN_ID': int_pln_id})
-
-        return get_data_config_location_by_id(int_pln_id)
+    if type(dict_data) == type(None):
+        raise Exception(f'Nenhum registro de configuração de localização foi localizado com o ID {int_pln_id}.')
 
     return object_f3c1_plantation_config_location
 
@@ -1403,8 +1397,9 @@ def action_insert():
     # Processo de cadastro dos parâmetros de configuração de irrigação
     # ----------------------------------------------------------------
 
-    object_f3c1_plantation_config_irrigation = get_data_config_irrigation_by_id(int_pln_id, True)
-    dict_data_config_irrigation = object_f3c1_plantation_config_irrigation.get_one()
+    dict_data_config_irrigation = {}
+
+    dict_data_config_irrigation['PCI_PLN_ID'] = int_pln_id
 
     if 'pci_temp_min' in dict_temp and type(dict_temp['pci_temp_min']) != type(None):
         dict_data_config_irrigation['PCI_TEMP_MIN'] = dict_temp['pci_temp_min']
@@ -1442,14 +1437,16 @@ def action_insert():
     if 'pci_ph_max' in dict_ph and type(dict_ph['pci_ph_max']) != type(None):
         dict_data_config_irrigation['PCI_PH_MAX'] = dict_ph['pci_ph_max']
 
-    object_f3c1_plantation_config_irrigation.update(dict_data_config_irrigation)
+    object_f3c1_plantation_config_irrigation = F3C1PlantationConfigIrrigation()
+    object_f3c1_plantation_config_irrigation.insert(dict_data_config_irrigation)
 
     # --------------------------------------------------
     # Processo de cadastro dos parâmetros de localização
     # --------------------------------------------------
 
-    object_f3c1_plantation_config_location = get_data_config_location_by_id(int_pln_id, True)
-    dict_data_config_location = object_f3c1_plantation_config_location.get_one()
+    dict_data_config_location = {}
+
+    dict_data_config_location['PCL_PLN_ID'] = int_pln_id
 
     if float_latitude > 0.00:
         dict_data_config_location['PCL_LATITUDE'] = float_latitude
@@ -1457,8 +1454,10 @@ def action_insert():
     if float_longitude > 0.00:
         dict_data_config_location['PCL_LONGITUDE'] = float_longitude
 
-    object_f3c1_plantation_config_location.update(dict_data_config_location)
+    object_f3c1_plantation_config_location = F3C1PlantationConfigLocation()
+    object_f3c1_plantation_config_location.insert(dict_data_config_location)
 
+    # Retorno de dados após o cadastro
     object_f3c1_plantation = get_data_by_id(int_pln_id)
     dict_data = object_f3c1_plantation.get_one()
 
@@ -1519,14 +1518,107 @@ def action_update():
 
     int_pln_crp_id = validate_crop_id(dict_data)
 
-    # <PENDENTE>
-    # - Aplicar os demais campos
+    # -------
+    # Etapa 24
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    print('Os próximos parâmetros fazem parte da configuração para que o sistema automático de irrigação seja executado. O preenchimento não é obrigatório.')
+    input(f'\nPressione <enter> para continuar...')
+
+    # -------
+    # Etapa 5
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_temp = validate_temp(dict_data)
+
+    # -------
+    # Etapa 6
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_humidity = validate_humidity(dict_data)
+
+    # -------
+    # Etapa 7
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_light = validate_light(dict_data)
+
+    # -------
+    # Etapa 8
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_radiation = validate_radiation(dict_data)
+
+    # -------
+    # Etapa 9
+    # -------
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_salinity = validate_salinity(dict_data)
+
+    # --------
+    # Etapa 10
+    # --------
+
+    Main.init_step()
+
+    show_head_module()
+
+    dict_ph = validate_ph(dict_data)
+
+    # --------
+    # Etapa 11
+    # --------
+
+    Main.init_step()
+
+    show_head_module()
+
+    print('Os próximos parâmetros fazem parte da localização geográfica da plantação. O preenchimento não é obrigatório.')
+    input(f'\nPressione <enter> para continuar...')
+
+    # --------
+    # Etapa 12
+    # --------
+
+    Main.init_step()
+
+    show_head_module()
+
+    float_latitude = validate_latitude(dict_data)
+
+    print('')
+
+    float_longitude = validate_longitude(dict_data)
 
     Main.loading('Salvando dados, por favor aguarde...')
 
-    # -------
-    # Etapa 4
-    # -------
+    # --------
+    # Etapa 13
+    # --------
 
     Main.init_step()
 
@@ -1540,8 +1632,97 @@ def action_update():
 
     object_f3c1_plantation.update(dict_data)
 
-    # <PENDENTE>
-    # Salvar os demais campos
+    # -------------------------------------------------------------------
+    # Processo de atualização dos parâmetros de configuração de irrigação
+    # -------------------------------------------------------------------
+
+    object_f3c1_plantation_config_irrigation = get_data_config_irrigation_by_id(int_pln_id)
+    dict_data_config_irrigation = object_f3c1_plantation_config_irrigation.get_one()
+
+    if 'pci_temp_min' in dict_temp and type(dict_temp['pci_temp_min']) != type(None):
+        dict_data_config_irrigation['PCI_TEMP_MIN'] = dict_temp['pci_temp_min']
+    else:
+        dict_data_config_irrigation['PCI_TEMP_MIN'] = ''
+
+    if 'pci_temp_max' in dict_temp and type(dict_temp['pci_temp_max']) != type(None):
+        dict_data_config_irrigation['PCI_TEMP_MAX'] = dict_temp['pci_temp_max']
+    else:
+        dict_data_config_irrigation['PCI_TEMP_MAX'] = ''
+
+    if 'pci_humidity_min' in dict_humidity and type(dict_humidity['pci_humidity_min']) != type(None):
+        dict_data_config_irrigation['PCI_HUMIDITY_MIN'] = dict_humidity['pci_humidity_min']
+    else:
+        dict_data_config_irrigation['PCI_HUMIDITY_MIN'] = ''
+
+    if 'pci_humidity_max' in dict_humidity and type(dict_humidity['pci_humidity_max']) != type(None):
+        dict_data_config_irrigation['PCI_HUMIDITY_MAX'] = dict_humidity['pci_humidity_max']
+    else:
+        dict_data_config_irrigation['PCI_HUMIDITY_MAX'] = ''
+
+    if 'pci_light_min' in dict_light and type(dict_light['pci_light_min']) != type(None):
+        dict_data_config_irrigation['PCI_LIGHT_MIN'] = dict_light['pci_light_min']
+    else:
+        dict_data_config_irrigation['PCI_LIGHT_MIN'] = ''
+
+    if 'pci_light_max' in dict_light and type(dict_light['pci_light_max']) != type(None):
+        dict_data_config_irrigation['PCI_LIGHT_MAX'] = dict_light['pci_light_max']
+    else:
+        dict_data_config_irrigation['PCI_LIGHT_MAX'] = ''
+
+    if 'pci_radiation_min' in dict_radiation and type(dict_radiation['pci_radiation_min']) != type(None):
+        dict_data_config_irrigation['PCI_RADIATION_MIN'] = dict_radiation['pci_radiation_min']
+    else:
+        dict_data_config_irrigation['PCI_RADIATION_MIN'] = ''
+
+    if 'pci_radiation_max' in dict_radiation and type(dict_radiation['pci_radiation_max']) != type(None):
+        dict_data_config_irrigation['PCI_RADIATION_MAX'] = dict_radiation['pci_radiation_max']
+    else:
+        dict_data_config_irrigation['PCI_RADIATION_MAX'] = ''
+
+    if 'pci_salinity_min' in dict_salinity and type(dict_salinity['pci_salinity_min']) != type(None):
+        dict_data_config_irrigation['PCI_SALINITY_MIN'] = dict_salinity['pci_salinity_min']
+    else:
+        dict_data_config_irrigation['PCI_SALINITY_MIN'] = ''
+
+    if 'pci_salinity_max' in dict_salinity and type(dict_salinity['pci_salinity_max']) != type(None):
+        dict_data_config_irrigation['PCI_SALINITY_MAX'] = dict_salinity['pci_salinity_max']
+    else:
+        dict_data_config_irrigation['PCI_SALINITY_MAX'] = ''
+
+    if 'pci_ph_min' in dict_ph and type(dict_ph['pci_ph_min']) != type(None):
+        dict_data_config_irrigation['PCI_PH_MIN'] = dict_ph['pci_ph_min']
+    else:
+        dict_data_config_irrigation['PCI_PH_MIN'] = ''
+
+    if 'pci_ph_max' in dict_ph and type(dict_ph['pci_ph_max']) != type(None):
+        dict_data_config_irrigation['PCI_PH_MAX'] = dict_ph['pci_ph_max']
+    else:
+        dict_data_config_irrigation['PCI_PH_MAX'] = ''
+
+    object_f3c1_plantation_config_irrigation.update(dict_data_config_irrigation)
+
+    # -----------------------------------------------------
+    # Processo de atualização dos parâmetros de localização
+    # -----------------------------------------------------
+
+    object_f3c1_plantation_config_location = get_data_config_location_by_id(int_pln_id)
+    dict_data_config_location = object_f3c1_plantation_config_location.get_one()
+
+    if float_latitude > 0.00:
+        dict_data_config_location['PCL_LATITUDE'] = float_latitude
+    else:
+        dict_data_config_location['PCL_LATITUDE'] = ''
+
+    if float_longitude > 0.00:
+        dict_data_config_location['PCL_LONGITUDE'] = float_longitude
+    else:
+        dict_data_config_location['PCL_LONGITUDE'] = ''
+
+    object_f3c1_plantation_config_location.update(dict_data_config_location)
+
+    # Retorno de dados após as atualizações
+    object_f3c1_plantation = get_data_by_id(int_pln_id)
+    dict_data = object_f3c1_plantation.get_one()
 
     print(format_data_view(dict_data = dict_data, bool_show_update_date = False))
 
@@ -1584,7 +1765,7 @@ def action_delete():
     # Processo de exclusão dos parâmetros de configuração de irrigação
     # ----------------------------------------------------------------
 
-    object_f3c1_plantation_config_irrigation = get_data_config_irrigation_by_id(int_pln_id, True)
+    object_f3c1_plantation_config_irrigation = get_data_config_irrigation_by_id(int_pln_id)
     dict_data_config_irrigation = object_f3c1_plantation_config_irrigation.get_one()
 
     dict_data_config_irrigation['PCI_STATUS'] = F3C1PlantationConfigIrrigation.STATUS_DELETED
@@ -1595,7 +1776,7 @@ def action_delete():
     # Processo de exclusão dos parâmetros de localização
     # --------------------------------------------------
 
-    object_f3c1_plantation_config_location = get_data_config_location_by_id(int_pln_id, True)
+    object_f3c1_plantation_config_location = get_data_config_location_by_id(int_pln_id)
     dict_data_config_location = object_f3c1_plantation_config_location.get_one()
 
     dict_data_config_location['PCL_STATUS'] = F3C1PlantationConfigLocation.STATUS_DELETED

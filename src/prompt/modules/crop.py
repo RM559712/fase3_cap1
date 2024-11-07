@@ -388,6 +388,12 @@ def action_insert():
     object_f3c1_crop = F3C1Crop()
     object_f3c1_crop.insert(dict_data)
 
+    int_crp_id = object_f3c1_crop.get_last_id()
+
+    # Retorno de dados após o cadastro
+    object_f3c1_crop = get_data_by_id(int_crp_id)
+    dict_data = object_f3c1_crop.get_one()
+
     print(format_data_view(dict_data = dict_data, bool_show_id = False, bool_show_insert_date = False, bool_show_update_date = False))
 
     print('Registro cadastrado com sucesso.')
@@ -455,6 +461,10 @@ def action_update():
         dict_data['CRP_NAME'] = str_crp_name
 
     object_f3c1_crop.update(dict_data)
+
+    # Retorno de dados após as atualizações
+    object_f3c1_crop = get_data_by_id(int_crp_id)
+    dict_data = object_f3c1_crop.get_one()
 
     print(format_data_view(dict_data = dict_data, bool_show_update_date = False))
 

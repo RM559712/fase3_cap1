@@ -466,6 +466,12 @@ def action_insert():
     object_f3c1_sensor = F3C1Sensor()
     object_f3c1_sensor.insert(dict_data)
 
+    int_sns_id = object_f3c1_sensor.get_last_id()
+
+    # Retorno de dados após o cadastro
+    object_f3c1_sensor = get_data_by_id(int_sns_id)
+    dict_data = object_f3c1_sensor.get_one()
+
     print(format_data_view(dict_data = dict_data, bool_show_id = False, bool_show_insert_date = False, bool_show_update_date = False))
 
     print('Registro cadastrado com sucesso.')
@@ -540,6 +546,10 @@ def action_update():
         dict_data['SNS_SERIE_CODE'] = str_sns_serie_code
 
     object_f3c1_sensor.update(dict_data)
+
+    # Retorno de dados após as atualizações
+    object_f3c1_sensor = get_data_by_id(int_sns_id)
+    dict_data = object_f3c1_sensor.get_one()
 
     print(format_data_view(dict_data = dict_data, bool_show_update_date = False))
 
