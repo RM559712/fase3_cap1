@@ -275,14 +275,14 @@ def validate_crop_id(dict_data: dict = {}) -> int:
         try:
 
             if bool_is_update == False and int_return.strip() == '':
-                raise Exception('Deve ser informado uma cultura válida.')
+                raise Exception('Deve ser informada uma cultura válida.')
 
             if int_return.strip() != '' and Helper.is_int(int_return) == False: 
                 raise Exception('O conteúdo informado deve ser numérico.')
 
             if Helper.is_int(int_return) == True:
 
-                ModuleCrop.get_data_by_id(int_return)
+                get_data_crop_by_id(int_return)
 
             break
 

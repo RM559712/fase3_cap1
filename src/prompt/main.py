@@ -117,6 +117,10 @@ def get_system_menu_options() -> list:
             'action': ModuleIrrigation.action_main
         },{
             'code': 5,
+            'title': 'Medições',
+            'action': ModuleMeasurement.action_main
+        },{
+            'code': 6,
             'title': 'Sair',
             'action': action_exit
         }
@@ -235,6 +239,12 @@ import prompt.modules.sensor as ModuleSensor
 # ---------------------------------------------------------------------------------------------------------------
 
 import prompt.modules.irrigation as ModuleIrrigation
+
+# ---------------------------------------------------------------------------------------------------------------
+# Métodos referentes a opção "Medições"
+# ---------------------------------------------------------------------------------------------------------------
+
+import prompt.modules.measurement as ModuleMeasurement
 
 # ... Demais módulos...
 
