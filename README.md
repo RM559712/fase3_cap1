@@ -6,11 +6,11 @@
 
 <br>
 
-# Agro-DOS - Alertas meteorológicos para plantio
+# Agro-DOS - Automatização de irrigações
 
 ## 👨‍👩 Grupo
 
-Grupo de número <b>27</b> formado pelos integrantes mencionados abaixo.
+Grupo de número <b>29</b> formado pelos integrantes mencionados abaixo.
 
 ## 👨‍🎓 Integrantes: 
 - <a href="https://www.linkedin.com/in/cirohenrique/">Ciro Henrique</a> ( <i>RM559040</i> )
@@ -28,15 +28,13 @@ Grupo de número <b>27</b> formado pelos integrantes mencionados abaixo.
 
 ## 📜 Descrição
 
-<b>Referência</b>: https://on.fiap.com.br/mod/assign/view.php?id=430788&c=11356
+<b>Referência</b>: https://on.fiap.com.br/mod/assign/view.php?id=439230&c=11933
 
-Essa versão possui funcionalidades que visam auxiliar o plantio de diferentes culturas através de alertas meteorológicos de acordo com a região desejada.
+Essa versão possui funcionalidades que visam automatizar a execução de irrigações de plantações a partir de medições de sensores e alertas meteorológicos de acordo com a região das plantações.
 
 Algumas informações sobre os módulos dessa versão:
 
-- Módulo "Culturas": Permite que sejam cadastradas diferentes culturas com seus respectivos ranges de parâmetros ideais (<i>mínimo e máximo</i>) para as medições de temperatura, umidade, velocidade do vento e quantidade de chuva.
-- Módulo "Análises e alertas para plantio": A partir das culturas previamente cadastradas e parametrizadas, permite que sejam efetuadas análises com alertas para as medições de temperatura, umidade, velocidade do vento e quantidade de chuva
-a partir de uma determinada localização ao redor do mundo. A localização pode ser definida através do nome da cidade, seguida das siglas de estado/província e país ou através da longitude e latitude do local desejado. Ao final, é disponibilizado um relatório detalhado contendo informações atualizadas para cada medição e uma análise final.
+- <PENDENTE>
 
 ## 📁 Estrutura de pastas
 
@@ -53,11 +51,6 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 4. <b>scripts</b>: Diretório para armazenamento de scripts.
     - Diretório "oracle": Diretório para armazenamento de scripts do banco de dados Oracle.
-        - Arquivo "CROP.sql": Scripts da tabela "CROP".
-        - Arquivo "CROP_SEQ.sql": Scripts do <i>sequencial</i> da coluna "CRP_ID".
-        - Arquivo "queries.sql": Scripts genéricos do banco de dados.
-        - Arquivo "TRIGGER_CRP_ID.sql": Scripts da <i>trigger</i> da coluna "CRP_ID".
-        - Arquivo "TRIGGER_CRP_UPDATE_DATE.sql": Scripts da <i>trigger</i> da coluna "CRP_UPDATE_DATE".
 
 5. <b>src</b>: Diretório para armazenamento de código fonte do sistema em Python.
     - Diretório "custom": Diretório para armazenamento <i>classes/componentes</i> auxiliares do sistema.
@@ -77,8 +70,8 @@ Para essa versão não são solicitados parâmetros para acesso como por exemplo
 
 ## 🗃 Histórico de lançamentos
 
-* 1.0.0 - 15/10/2024
+* 1.0.0 - 13/11/2024
 
 ## 📋 Licença
 
-Desenvolvido pelo Grupo 27 para o projeto da fase 2 (<i>Cap 6 - Python e além</i>) da <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://fiap.com.br">Fiap</a>. Está licenciado sobre <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Attribution 4.0 International</a>.</p>
+Desenvolvido pelo Grupo 29 para o projeto da fase 3 (<i>Cap 1 - Construindo uma máquina agrícola</i>) da <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://fiap.com.br">Fiap</a>. Está licenciado sobre <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Attribution 4.0 International</a>.</p>
