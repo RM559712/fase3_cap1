@@ -176,7 +176,7 @@ class OpenWeather:
             # Lista de dados padrão ( intervalos de 3h )
             #list_weather_forecast_data = dict_weather_forecast_data['list']
 
-            # LIsta de dados personalizada com intervalos de 6h
+            # Lista de dados personalizada com intervalos de 6h
             list_weather_forecast_data = [dict_weather for dict_weather in dict_weather_forecast_data['list'] if (
                 '03:00:00' in dict_weather['dt_txt'] or 
                 '09:00:00' in dict_weather['dt_txt'] or 

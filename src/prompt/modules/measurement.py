@@ -1,5 +1,6 @@
 import datetime
 import os
+import pprint
 import sys
 
 # > Importante: A definição abaixo referente ao diretório raiz deve ser efetuada antes das importações de arquivos do sistema.
@@ -9,7 +10,9 @@ import prompt.main as Main
 import prompt.modules.sensor as ModuleSensor
 import prompt.modules.plantation as ModulePlantation
 from custom.helper import Helper
+from custom.irrigation import Irrigation
 from models.f3_c1_measurement import F3C1Measurement
+from models.f3_c1_irrigation import F3C1Irrigation
 
 """
 Método responsável pela exibição do cabeçalho do módulo
@@ -481,8 +484,67 @@ def action_insert():
 
     float_msm_value = validate_value()
 
+    # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+    dict_data_plantation = get_data_plantation_by_id(int_msm_pln_id)
+    dict_data_sensor = get_data_sensor_by_id(int_msm_sns_id)
+
+    dict_validate_irrigation = {'dict_filters_plantation': {}, 'dict_measurement': {}, 'dict_filters_rain': {}}
+
+    dict_validate_irrigation['dict_filters_plantation']['float_temp_min'] = dict_data_plantation['PCI_TEMP_MIN']
+    dict_validate_irrigation['dict_filters_plantation']['float_temp_max'] = dict_data_plantation['PCI_TEMP_MAX']
+    dict_validate_irrigation['dict_filters_plantation']['float_humidity_min'] = dict_data_plantation['PCI_HUMIDITY_MIN']
+    dict_validate_irrigation['dict_filters_plantation']['float_humidity_max'] = dict_data_plantation['PCI_HUMIDITY_MAX']
+    dict_validate_irrigation['dict_filters_plantation']['float_light_min'] = dict_data_plantation['PCI_LIGHT_MIN']
+    dict_validate_irrigation['dict_filters_plantation']['float_light_max'] = dict_data_plantation['PCI_LIGHT_MAX']
+    dict_validate_irrigation['dict_filters_plantation']['float_radiation_min'] = dict_data_plantation['PCI_RADIATION_MIN']
+    dict_validate_irrigation['dict_filters_plantation']['float_radiation_max'] = dict_data_plantation['PCI_RADIATION_MAX']
+    dict_validate_irrigation['dict_filters_plantation']['float_salinity_min'] = dict_data_plantation['PCI_SALINITY_MIN']
+    dict_validate_irrigation['dict_filters_plantation']['float_salinity_max'] = dict_data_plantation['PCI_SALINITY_MAX']
+    dict_validate_irrigation['dict_filters_plantation']['float_ph_min'] = dict_data_plantation['PCI_PH_MIN']
+    dict_validate_irrigation['dict_filters_plantation']['float_ph_max'] = dict_data_plantation['PCI_PH_MAX']
+
+    dict_validate_irrigation['dict_measurement']['int_sensor_type'] = '1'
+    dict_validate_irrigation['dict_measurement']['float_value'] = float_msm_value
+
+    dict_validate_irrigation['dict_filters_rain']['float_latitude'] = float(dict_data_plantation['PCL_LATITUDE'])
+    dict_validate_irrigation['dict_filters_rain']['float_longitude'] = float(dict_data_plantation['PCL_LONGITUDE'])
+    dict_validate_irrigation['dict_filters_rain']['int_next_hours_validate'] = 4
+    dict_validate_irrigation['dict_filters_rain']['float_max_average_rain_volume'] = 4.2
+
+    object_irrigation = Irrigation()
+
+    dict_return_validate_irrigation = object_irrigation.validate_begin_execution_by_plantation(dict_validate_irrigation)
+    if dict_return_validate_irrigation['status'] == False:
+        raise Exception(dict_return_validate_irrigation['message'])
+
     # <PENDENTE>
-    # - Execução da validação para iniciar uma irrigação automática
+    # - Adicionar o parâmetro "Tipo de sensor" no cadastro de sensores
+    #       - Enviar esse parâmetro na key "int_sensor_type" dentro de "dict_measurement"
+    # - Adicionar os parâmetros "Quantidade de horas para validação de chuva" e "Média máxima de chuva" no cadastro de plantações
+    #       - Enviar esses parâmetros nas keys "int_next_hours_validate" e "float_max_average_rain_volume" dentro da key "dict_filters_rain"
+    pprint.pprint(dict_return_validate_irrigation)
+
+    # Análises a partir de configurações da plantação
+    if dict_return_validate_irrigation['dict_data']['dict_analysis_filters_plantation']['status'] == True:
+
+        # Análises a partir da validação de chuva no local da plantação
+        if dict_return_validate_irrigation['dict_data']['dict_analysis_filters_rain']['status'] == True:
+
+            object_f3c1_irrigation = F3C1Irrigation()
+
+            # Verifica se a plantação não possui uma irrigação já iniciada
+            if object_f3c1_irrigation.validate_exists_active_execution_by_plantation(int_msm_pln_id) == False:
+
+                dict_begin_execution = object_f3c1_irrigation.begin_execution_by_plantation({'pln_id': int_msm_pln_id})
+                if dict_begin_execution['status'] == False:
+                    raise Exception(dict_begin_execution['message'])
+
+                print('Irrigação iniciada com sucesso.')
+
+    return
+
+    # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
     Main.loading('Salvando dados, por favor aguarde...')
 

@@ -1017,7 +1017,7 @@ def validate_latitude(dict_data: dict = {}) -> float:
             print(f'{error} Tente novamente: ', end = '')
             float_return = input()
 
-    return float(float_return) if float_return.strip() != '' and float_return.strip().lower() != 'none' else 0.00
+    return float(float_return) if float_return.strip() != '' and float_return.strip().lower() != 'none' else ''
 
 
 """
@@ -1071,7 +1071,7 @@ def validate_longitude(dict_data: dict = {}) -> float:
             print(f'{error} Tente novamente: ', end = '')
             float_return = input()
 
-    return float(float_return) if float_return.strip() != '' and float_return.strip().lower() != 'none' else 0.00
+    return float(float_return) if float_return.strip() != '' and float_return.strip().lower() != 'none' else ''
 
 
 """
@@ -1447,12 +1447,8 @@ def action_insert():
     dict_data_config_location = {}
 
     dict_data_config_location['PCL_PLN_ID'] = int_pln_id
-
-    if float_latitude > 0.00:
-        dict_data_config_location['PCL_LATITUDE'] = float_latitude
-
-    if float_longitude > 0.00:
-        dict_data_config_location['PCL_LONGITUDE'] = float_longitude
+    dict_data_config_location['PCL_LATITUDE'] = float_latitude
+    dict_data_config_location['PCL_LONGITUDE'] = float_longitude
 
     object_f3c1_plantation_config_location = F3C1PlantationConfigLocation()
     object_f3c1_plantation_config_location.insert(dict_data_config_location)
@@ -1708,15 +1704,8 @@ def action_update():
     object_f3c1_plantation_config_location = get_data_config_location_by_id(int_pln_id)
     dict_data_config_location = object_f3c1_plantation_config_location.get_one()
 
-    if float_latitude > 0.00:
-        dict_data_config_location['PCL_LATITUDE'] = float_latitude
-    else:
-        dict_data_config_location['PCL_LATITUDE'] = ''
-
-    if float_longitude > 0.00:
-        dict_data_config_location['PCL_LONGITUDE'] = float_longitude
-    else:
-        dict_data_config_location['PCL_LONGITUDE'] = ''
+    dict_data_config_location['PCL_LATITUDE'] = float_latitude
+    dict_data_config_location['PCL_LONGITUDE'] = float_longitude
 
     object_f3c1_plantation_config_location.update(dict_data_config_location)
 
