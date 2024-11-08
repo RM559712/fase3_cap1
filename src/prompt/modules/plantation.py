@@ -365,8 +365,8 @@ def validate_temp(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_temp_min = input()
 
-    if pci_temp_min.strip() != '' and pci_temp_min.strip().lower() != 'none':
-        dict_return['pci_temp_min'] = float(pci_temp_min)
+    if pci_temp_min.strip() != '':
+        dict_return['pci_temp_min'] = float(pci_temp_min) if pci_temp_min.strip().lower() != 'none' else ''
 
     # ----------------
     # Parâmetro máximo
@@ -388,7 +388,7 @@ def validate_temp(dict_data: dict = {}) -> dict:
                 if Helper.is_float(pci_temp_max) == False and Helper.is_int(pci_temp_max) == False:
                     raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
 
-                if type(dict_return['pci_temp_min']) != type(None):
+                if type(dict_return['pci_temp_min']) != type(None) and Helper.is_float(dict_return['pci_temp_min']) == True:
 
                     if float(pci_temp_max) <= dict_return['pci_temp_min']:
                         raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
@@ -400,8 +400,8 @@ def validate_temp(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_temp_max = input()
 
-    if pci_temp_max.strip() != '' and pci_temp_max.strip().lower() != 'none':
-        dict_return['pci_temp_max'] = float(pci_temp_max)
+    if pci_temp_max.strip() != '':
+        dict_return['pci_temp_max'] = float(pci_temp_max) if pci_temp_max.strip().lower() != 'none' else ''
 
     return dict_return
 
@@ -477,8 +477,8 @@ def validate_humidity(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_humidity_min = input()
 
-    if pci_humidity_min.strip() != '' and pci_humidity_min.strip().lower() != 'none':
-        dict_return['pci_humidity_min'] = float(pci_humidity_min)
+    if pci_humidity_min.strip() != '':
+        dict_return['pci_humidity_min'] = float(pci_humidity_min) if pci_humidity_min.strip().lower() != 'none' else ''
 
     # ----------------
     # Parâmetro máximo
@@ -500,7 +500,7 @@ def validate_humidity(dict_data: dict = {}) -> dict:
                 if Helper.is_float(pci_humidity_max) == False and Helper.is_int(pci_humidity_max) == False:
                     raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
 
-                if type(dict_return['pci_humidity_min']) != type(None):
+                if type(dict_return['pci_humidity_min']) != type(None) and Helper.is_float(dict_return['pci_humidity_min']) == True:
 
                     if float(pci_humidity_max) <= dict_return['pci_humidity_min']:
                         raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
@@ -512,8 +512,8 @@ def validate_humidity(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_humidity_max = input()
 
-    if pci_humidity_max.strip() != '' and pci_humidity_max.strip().lower() != 'none':
-        dict_return['pci_humidity_max'] = float(pci_humidity_max)
+    if pci_humidity_max.strip() != '':
+        dict_return['pci_humidity_max'] = float(pci_humidity_max) if pci_humidity_max.strip().lower() != 'none' else ''
 
     return dict_return
 
@@ -589,8 +589,8 @@ def validate_light(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_light_min = input()
 
-    if pci_light_min.strip() != '' and pci_light_min.strip().lower() != 'none':
-        dict_return['pci_light_min'] = float(pci_light_min)
+    if pci_light_min.strip() != '':
+        dict_return['pci_light_min'] = float(pci_light_min) if pci_light_min.strip().lower() != 'none' else ''
 
     # ----------------
     # Parâmetro máximo
@@ -612,7 +612,7 @@ def validate_light(dict_data: dict = {}) -> dict:
                 if Helper.is_float(pci_light_max) == False and Helper.is_int(pci_light_max) == False:
                     raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
 
-                if type(dict_return['pci_light_min']) != type(None):
+                if type(dict_return['pci_light_min']) != type(None) and Helper.is_float(dict_return['pci_light_min']) == True:
 
                     if float(pci_light_max) <= dict_return['pci_light_min']:
                         raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
@@ -624,8 +624,8 @@ def validate_light(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_light_max = input()
 
-    if pci_light_max.strip() != '' and pci_light_max.strip().lower() != 'none':
-        dict_return['pci_light_max'] = float(pci_light_max)
+    if pci_light_max.strip() != '':
+        dict_return['pci_light_max'] = float(pci_light_max) if pci_light_max.strip().lower() != 'none' else ''
 
     return dict_return
 
@@ -701,8 +701,8 @@ def validate_radiation(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_radiation_min = input()
 
-    if pci_radiation_min.strip() != '' and pci_radiation_min.strip().lower() != 'none':
-        dict_return['pci_radiation_min'] = float(pci_radiation_min)
+    if pci_radiation_min.strip() != '':
+        dict_return['pci_radiation_min'] = float(pci_radiation_min) if pci_radiation_min.strip().lower() != 'none' else ''
 
     # ----------------
     # Parâmetro máximo
@@ -724,7 +724,7 @@ def validate_radiation(dict_data: dict = {}) -> dict:
                 if Helper.is_float(pci_radiation_max) == False and Helper.is_int(pci_radiation_max) == False:
                     raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
 
-                if type(dict_return['pci_radiation_min']) != type(None):
+                if type(dict_return['pci_radiation_min']) != type(None) and Helper.is_float(dict_return['pci_radiation_min']) == True:
 
                     if float(pci_radiation_max) <= dict_return['pci_radiation_min']:
                         raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
@@ -736,8 +736,8 @@ def validate_radiation(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_radiation_max = input()
 
-    if pci_radiation_max.strip() != '' and pci_radiation_max.strip().lower() != 'none':
-        dict_return['pci_radiation_max'] = float(pci_radiation_max)
+    if pci_radiation_max.strip() != '':
+        dict_return['pci_radiation_max'] = float(pci_radiation_max) if pci_radiation_max.strip().lower() != 'none' else ''
 
     return dict_return
 
@@ -813,8 +813,8 @@ def validate_salinity(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_salinity_min = input()
 
-    if pci_salinity_min.strip() != '' and pci_salinity_min.strip().lower() != 'none':
-        dict_return['pci_salinity_min'] = float(pci_salinity_min)
+    if pci_salinity_min.strip() != '':
+        dict_return['pci_salinity_min'] = float(pci_salinity_min) if pci_salinity_min.strip().lower() != 'none' else ''
 
     # ----------------
     # Parâmetro máximo
@@ -836,7 +836,7 @@ def validate_salinity(dict_data: dict = {}) -> dict:
                 if Helper.is_float(pci_salinity_max) == False and Helper.is_int(pci_salinity_max) == False:
                     raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
 
-                if type(dict_return['pci_salinity_min']) != type(None):
+                if type(dict_return['pci_salinity_min']) != type(None) and Helper.is_float(dict_return['pci_salinity_min']) == True:
 
                     if float(pci_salinity_max) <= dict_return['pci_salinity_min']:
                         raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
@@ -848,8 +848,8 @@ def validate_salinity(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_salinity_max = input()
 
-    if pci_salinity_max.strip() != '' and pci_salinity_max.strip().lower() != 'none':
-        dict_return['pci_salinity_max'] = float(pci_salinity_max)
+    if pci_salinity_max.strip() != '':
+        dict_return['pci_salinity_max'] = float(pci_salinity_max) if pci_salinity_max.strip().lower() != 'none' else ''
 
     return dict_return
 
@@ -925,8 +925,8 @@ def validate_ph(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_ph_min = input()
 
-    if pci_ph_min.strip() != '' and pci_ph_min.strip().lower() != 'none':
-        dict_return['pci_ph_min'] = float(pci_ph_min)
+    if pci_ph_min.strip() != '':
+        dict_return['pci_ph_min'] = float(pci_ph_min) if pci_ph_min.strip().lower() != 'none' else ''
 
     # ----------------
     # Parâmetro máximo
@@ -948,7 +948,7 @@ def validate_ph(dict_data: dict = {}) -> dict:
                 if Helper.is_float(pci_ph_max) == False and Helper.is_int(pci_ph_max) == False:
                     raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
 
-                if type(dict_return['pci_ph_min']) != type(None):
+                if type(dict_return['pci_ph_min']) != type(None) and Helper.is_float(dict_return['pci_ph_min']) == True:
 
                     if float(pci_ph_max) <= dict_return['pci_ph_min']:
                         raise Exception(f'O valor máximo deve ser maior que o valor mínimo.')
@@ -960,8 +960,8 @@ def validate_ph(dict_data: dict = {}) -> dict:
             print(f'{error} Tente novamente: ', end = '')
             pci_ph_max = input()
 
-    if pci_ph_max.strip() != '' and pci_ph_max.strip().lower() != 'none':
-        dict_return['pci_ph_max'] = float(pci_ph_max)
+    if pci_ph_max.strip() != '':
+        dict_return['pci_ph_max'] = float(pci_ph_max) if pci_ph_max.strip().lower() != 'none' else ''
 
     return dict_return
 
@@ -1017,7 +1017,11 @@ def validate_latitude(dict_data: dict = {}) -> float:
             print(f'{error} Tente novamente: ', end = '')
             float_return = input()
 
-    return float(float_return) if float_return.strip() != '' and float_return.strip().lower() != 'none' else ''
+    float_value = None
+    if float_return.strip() != '':
+        float_value = float(float_return) if float_return.strip().lower() != 'none' else ''
+
+    return float_value
 
 
 """
@@ -1071,7 +1075,124 @@ def validate_longitude(dict_data: dict = {}) -> float:
             print(f'{error} Tente novamente: ', end = '')
             float_return = input()
 
-    return float(float_return) if float_return.strip() != '' and float_return.strip().lower() != 'none' else ''
+    float_value = None
+    if float_return.strip() != '':
+        float_value = float(float_return) if float_return.strip().lower() != 'none' else ''
+
+    return float_value
+
+
+"""
+Método responsável pela formatação de visualização da quantidade de horas para verificação de chuva do módulo "Plantações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_next_hours_validate_rain(dict_data: dict = {}) -> str:
+
+    str_return = 'Quantidade de horas para verificação de chuva: '
+    str_return += f'{dict_data['PCL_NEXT_HOURS_VALIDATE_RAIN']}h' if 'PCL_NEXT_HOURS_VALIDATE_RAIN' in dict_data and type(dict_data['PCL_NEXT_HOURS_VALIDATE_RAIN']) != None and Helper.is_int(dict_data['PCL_NEXT_HOURS_VALIDATE_RAIN']) == True else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação do parâmetro "Quantidade de horas para verificação de chuva"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def validate_next_hours_validate_rain(dict_data: dict = {}) -> int:
+
+    bool_is_update = ('PLN_ID' in dict_data and type(dict_data['PLN_ID']) == int)
+
+    str_label = f'Importante: Caso deseje manter a quantidade de horas para verificação de chuva atual ( abaixo ), basta ignorar o preenchimento.\n{format_data_view_next_hours_validate_rain(dict_data)}\n' if bool_is_update == True else ''
+    str_label += f'Informe a quantidade de horas para verificação de chuva em formato numérico ( ex.: 123 ): '
+    int_return = input(f'{str_label}')
+
+    while True:
+
+        try:
+
+            if int_return.strip() != '' and int_return.strip().lower() != 'none':
+
+                if Helper.is_int(int_return) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            int_return = input()
+
+    int_value = None
+    if int_return.strip() != '':
+        int_value = float(int_return) if int_return.strip().lower() != 'none' else ''
+
+    return int_value
+
+
+"""
+Método responsável pela formatação de visualização da quantidade média máxima de chuva do módulo "Plantações"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_max_average_rain_volume(dict_data: dict = {}) -> str:
+
+    str_return = 'Quantidade média máxima de chuva: '
+    str_return += f'{dict_data['PCL_MAX_AVERAGE_RAIN_VOLUME']} mm' if 'PCL_MAX_AVERAGE_RAIN_VOLUME' in dict_data and type(dict_data['PCL_MAX_AVERAGE_RAIN_VOLUME']) != None and Helper.is_int(dict_data['PCL_MAX_AVERAGE_RAIN_VOLUME']) == True else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação do parâmetro "Quantidade média máxima de chuva"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def validate_max_average_rain_volume(dict_data: dict = {}) -> float:
+
+    bool_is_update = ('PLN_ID' in dict_data and type(dict_data['PLN_ID']) == int)
+
+    str_label = f'Importante: Caso deseje manter a quantidade média máxima de chuva atual ( abaixo ), basta ignorar o preenchimento.\n{format_data_view_max_average_rain_volume(dict_data)}\n' if bool_is_update == True else ''
+    str_label += f'Informe a quantidade média máxima de chuva da plantação em formato numérico ( ex.: 123, 123.45 ou 123,45 ): '
+    float_return = input(f'{str_label}')
+
+    while True:
+
+        try:
+
+            if float_return.strip() != '' and float_return.strip().lower() != 'none':
+
+                if ',' in float_return:
+                    float_return = float_return.replace(',', '.')
+
+                if Helper.is_float(float_return) == False and Helper.is_int(float_return) == False:
+                    raise Exception('O conteúdo informado deve ser numérico ( ex.: 123, 123.45 ou 123,45 ).')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            float_return = input()
+
+    float_value = None
+    if float_return.strip() != '':
+        float_value = float(float_return) if float_return.strip().lower() != 'none' else ''
+
+    return float_value
 
 
 """
@@ -1135,6 +1256,8 @@ def format_data_view(dict_data: dict = {}, bool_show_id: bool = True, bool_show_
         str_return += f'- {format_data_view_ph(dict_data)} \n'
         str_return += f'- {format_data_view_latitude(dict_data)} \n'
         str_return += f'- {format_data_view_longitude(dict_data)} \n'
+        str_return += f'- {format_data_view_next_hours_validate_rain(dict_data)} \n'
+        str_return += f'- {format_data_view_max_average_rain_volume(dict_data)} \n'
         str_return += f'- {format_data_view_insert_date(dict_data)} \n' if bool_show_insert_date == True else ''
         str_return += f'- {format_data_view_update_date(dict_data)} \n' if bool_show_update_date == True else ''
 
@@ -1367,11 +1490,19 @@ def action_insert():
 
     show_head_module()
 
-    float_latitude = validate_latitude()
+    float_pcl_latitude = validate_latitude()
 
     print('')
 
-    float_longitude = validate_longitude()
+    float_pcl_longitude = validate_longitude()
+
+    print('')
+
+    int_pcl_next_hours_validate_rain = validate_next_hours_validate_rain()
+
+    print('')
+
+    float_pcl_max_average_rain_volume = validate_max_average_rain_volume()
 
     Main.loading('Salvando dados, por favor aguarde...')
 
@@ -1447,8 +1578,10 @@ def action_insert():
     dict_data_config_location = {}
 
     dict_data_config_location['PCL_PLN_ID'] = int_pln_id
-    dict_data_config_location['PCL_LATITUDE'] = float_latitude
-    dict_data_config_location['PCL_LONGITUDE'] = float_longitude
+    dict_data_config_location['PCL_LATITUDE'] = float_pcl_latitude
+    dict_data_config_location['PCL_LONGITUDE'] = float_pcl_longitude
+    dict_data_config_location['PCL_NEXT_HOURS_VALIDATE_RAIN'] = int_pcl_next_hours_validate_rain
+    dict_data_config_location['PCL_MAX_AVERAGE_RAIN_VOLUME'] = float_pcl_max_average_rain_volume
 
     object_f3c1_plantation_config_location = F3C1PlantationConfigLocation()
     object_f3c1_plantation_config_location.insert(dict_data_config_location)
@@ -1604,11 +1737,19 @@ def action_update():
 
     show_head_module()
 
-    float_latitude = validate_latitude(dict_data)
+    float_pcl_latitude = validate_latitude(dict_data)
 
     print('')
 
-    float_longitude = validate_longitude(dict_data)
+    float_pcl_longitude = validate_longitude(dict_data)
+
+    print('')
+
+    int_pcl_next_hours_validate_rain = validate_next_hours_validate_rain(dict_data)
+
+    print('')
+
+    float_pcl_max_average_rain_volume = validate_max_average_rain_volume(dict_data)
 
     Main.loading('Salvando dados, por favor aguarde...')
 
@@ -1637,63 +1778,39 @@ def action_update():
 
     if 'pci_temp_min' in dict_temp and type(dict_temp['pci_temp_min']) != type(None):
         dict_data_config_irrigation['PCI_TEMP_MIN'] = dict_temp['pci_temp_min']
-    else:
-        dict_data_config_irrigation['PCI_TEMP_MIN'] = ''
 
     if 'pci_temp_max' in dict_temp and type(dict_temp['pci_temp_max']) != type(None):
         dict_data_config_irrigation['PCI_TEMP_MAX'] = dict_temp['pci_temp_max']
-    else:
-        dict_data_config_irrigation['PCI_TEMP_MAX'] = ''
 
     if 'pci_humidity_min' in dict_humidity and type(dict_humidity['pci_humidity_min']) != type(None):
         dict_data_config_irrigation['PCI_HUMIDITY_MIN'] = dict_humidity['pci_humidity_min']
-    else:
-        dict_data_config_irrigation['PCI_HUMIDITY_MIN'] = ''
 
     if 'pci_humidity_max' in dict_humidity and type(dict_humidity['pci_humidity_max']) != type(None):
         dict_data_config_irrigation['PCI_HUMIDITY_MAX'] = dict_humidity['pci_humidity_max']
-    else:
-        dict_data_config_irrigation['PCI_HUMIDITY_MAX'] = ''
 
     if 'pci_light_min' in dict_light and type(dict_light['pci_light_min']) != type(None):
         dict_data_config_irrigation['PCI_LIGHT_MIN'] = dict_light['pci_light_min']
-    else:
-        dict_data_config_irrigation['PCI_LIGHT_MIN'] = ''
 
     if 'pci_light_max' in dict_light and type(dict_light['pci_light_max']) != type(None):
         dict_data_config_irrigation['PCI_LIGHT_MAX'] = dict_light['pci_light_max']
-    else:
-        dict_data_config_irrigation['PCI_LIGHT_MAX'] = ''
 
     if 'pci_radiation_min' in dict_radiation and type(dict_radiation['pci_radiation_min']) != type(None):
         dict_data_config_irrigation['PCI_RADIATION_MIN'] = dict_radiation['pci_radiation_min']
-    else:
-        dict_data_config_irrigation['PCI_RADIATION_MIN'] = ''
 
     if 'pci_radiation_max' in dict_radiation and type(dict_radiation['pci_radiation_max']) != type(None):
         dict_data_config_irrigation['PCI_RADIATION_MAX'] = dict_radiation['pci_radiation_max']
-    else:
-        dict_data_config_irrigation['PCI_RADIATION_MAX'] = ''
 
     if 'pci_salinity_min' in dict_salinity and type(dict_salinity['pci_salinity_min']) != type(None):
         dict_data_config_irrigation['PCI_SALINITY_MIN'] = dict_salinity['pci_salinity_min']
-    else:
-        dict_data_config_irrigation['PCI_SALINITY_MIN'] = ''
 
     if 'pci_salinity_max' in dict_salinity and type(dict_salinity['pci_salinity_max']) != type(None):
         dict_data_config_irrigation['PCI_SALINITY_MAX'] = dict_salinity['pci_salinity_max']
-    else:
-        dict_data_config_irrigation['PCI_SALINITY_MAX'] = ''
 
     if 'pci_ph_min' in dict_ph and type(dict_ph['pci_ph_min']) != type(None):
         dict_data_config_irrigation['PCI_PH_MIN'] = dict_ph['pci_ph_min']
-    else:
-        dict_data_config_irrigation['PCI_PH_MIN'] = ''
 
     if 'pci_ph_max' in dict_ph and type(dict_ph['pci_ph_max']) != type(None):
         dict_data_config_irrigation['PCI_PH_MAX'] = dict_ph['pci_ph_max']
-    else:
-        dict_data_config_irrigation['PCI_PH_MAX'] = ''
 
     object_f3c1_plantation_config_irrigation.update(dict_data_config_irrigation)
 
@@ -1704,10 +1821,20 @@ def action_update():
     object_f3c1_plantation_config_location = get_data_config_location_by_id(int_pln_id)
     dict_data_config_location = object_f3c1_plantation_config_location.get_one()
 
-    dict_data_config_location['PCL_LATITUDE'] = float_latitude
-    dict_data_config_location['PCL_LONGITUDE'] = float_longitude
+    if type(float_pcl_latitude) != type(None):
+        dict_data_config_location['PCL_LATITUDE'] = float_pcl_latitude
 
-    object_f3c1_plantation_config_location.update(dict_data_config_location)
+    if type(float_pcl_longitude) != type(None):
+        dict_data_config_location['PCL_LONGITUDE'] = float_pcl_longitude
+
+    if type(int_pcl_next_hours_validate_rain) != type(None):
+        dict_data_config_location['PCL_NEXT_HOURS_VALIDATE_RAIN'] = int_pcl_next_hours_validate_rain
+
+    if type(float_pcl_max_average_rain_volume) != type(None):
+        dict_data_config_location['PCL_MAX_AVERAGE_RAIN_VOLUME'] = float_pcl_max_average_rain_volume
+
+    if type(dict_data_config_location) != type(None):
+        object_f3c1_plantation_config_location.update(dict_data_config_location)
 
     # Retorno de dados após as atualizações
     object_f3c1_plantation = get_data_by_id(int_pln_id)

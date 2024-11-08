@@ -323,6 +323,128 @@ def validate_serie_code(dict_data: dict = {}) -> str:
 
 
 """
+Método responsável por retornar os tipos de sensores do módulo "Sensores"
+
+Arguments:
+- int_code: Código de um tipo específico para retorno ( int )
+
+Return: list
+"""
+def get_type_options(int_code: int = 0) -> list:
+
+    dict_types = [
+        {
+            'code': F3C1Sensor.TYPE_TEMPERATURE,
+            'title': 'Sensor de Temperatura do solo'
+        },{
+            'code': F3C1Sensor.TYPE_HUMIDITY,
+            'title': 'Sensor de Umidade do solo'
+        },{
+            'code': F3C1Sensor.TYPE_LIGHT,
+            'title': 'Sensor de luminosidade'
+        },{
+            'code': F3C1Sensor.TYPE_RADIATION,
+            'title': 'Sensor de radiação'
+        },{
+            'code': F3C1Sensor.TYPE_SALINITY,
+            'title': 'Sensor de salinidade do solo'
+        },{
+            'code': F3C1Sensor.TYPE_PH,
+            'title': 'Sensor de pH do solo'
+        }
+    ]
+
+    if int_code > 0:
+
+        for dict_type in dict_types:
+
+            if dict_type['code'] == int_code:
+                return dict_type
+
+    return dict_types
+
+
+"""
+Método responsável por retornar os códigos dos tipos de sensores do módulo "Sensores"
+
+Return: list
+"""
+def get_type_options_codes() -> list:
+
+    list_return = []
+
+    list_type_options = get_type_options()
+
+    for dict_type_option in list_type_options:
+        list_return.append(dict_type_option['code'])
+
+    return list_return
+
+
+"""
+Método responsável pela formatação de visualização do tipo de sensor do módulo "Sensores"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def format_data_view_type(dict_data: dict = {}) -> str:
+
+    str_return = 'Tipo de sensor: '
+    str_return += f'{get_type_options(dict_data['SNS_TYPE'])['title']}' if 'SNS_TYPE' in dict_data and type(dict_data['SNS_TYPE']) != None and Helper.is_int(dict_data['SNS_TYPE']) == True else 'N/I'
+
+    return str_return
+
+
+"""
+Método responsável pela validação do parâmetro "Código de série"
+
+Arguments:
+- dict_data: Dict contendo os dados conforme retorno do banco de dados ( dictionary )
+
+Return: str
+"""
+def validate_type(dict_data: dict = {}) -> int:
+
+    bool_is_update = ('SNS_ID' in dict_data and type(dict_data['SNS_ID']) == int)
+
+    str_label = f'Importante: Caso deseje manter o tipo de sensor atual ( abaixo ), basta ignorar o preenchimento.\n{format_data_view_type(dict_data)}\n' if bool_is_update == True else ''
+
+    str_label += f'Os tipos de sensores são: '
+    list_type_options = get_type_options()
+    for list_type_option in list_type_options:
+        str_label += f'{list_type_option['title']} [{list_type_option['code']}]; '
+
+    str_label += f'\nInforme o código do tipo de sensor: '
+    int_return = input(f'{str_label}')
+
+    while True:
+
+        try:
+
+            if bool_is_update == False and int_return.strip() == '':
+                raise Exception('Deve ser informado um tipo de sensor válido.')
+
+            if bool_is_update == False and Helper.is_int(int_return) == False: 
+                raise Exception('O conteúdo informado deve ser numérico.')
+
+            if int_return.strip() != '':
+
+                if int(int_return) not in get_type_options_codes(): 
+                    raise Exception('A opção informada deve representar um dos tipos disponíveis.')
+
+            break
+
+        except Exception as error:
+
+            print(f'{error} Tente novamente: ', end = '')
+            int_return = input()
+
+    return int(int_return) if int_return.strip() != '' else 0
+
+
+"""
 Método responsável pela formatação de visualização da data de cadastro do módulo "Sensores"
 
 Arguments:
@@ -375,6 +497,7 @@ def format_data_view(dict_data: dict = {}, bool_show_id: bool = True, bool_show_
         str_return += f'- {format_data_view_id(dict_data)} \n' if bool_show_id == True else ''
         str_return += f'- {format_data_view_name(dict_data)} \n'
         str_return += f'- {format_data_view_serie_code(dict_data)} \n'
+        str_return += f'- {format_data_view_type(dict_data)} \n'
         str_return += f'- {format_data_view_insert_date(dict_data)} \n' if bool_show_insert_date == True else ''
         str_return += f'- {format_data_view_update_date(dict_data)} \n' if bool_show_update_date == True else ''
 
@@ -448,6 +571,10 @@ def action_insert():
 
     str_sns_serie_code = validate_serie_code()
 
+    print('')
+
+    int_sns_type = validate_type()
+
     Main.loading('Salvando dados, por favor aguarde...')
 
     # -------
@@ -462,6 +589,7 @@ def action_insert():
 
     dict_data['SNS_NAME'] = str_sns_name
     dict_data['SNS_SERIE_CODE'] = str_sns_serie_code
+    dict_data['SNS_TYPE'] = int_sns_type
 
     object_f3c1_sensor = F3C1Sensor()
     object_f3c1_sensor.insert(dict_data)
@@ -529,6 +657,10 @@ def action_update():
 
     str_sns_serie_code = validate_serie_code(dict_data)
 
+    print('')
+
+    str_sns_type = validate_type(dict_data)
+
     Main.loading('Salvando dados, por favor aguarde...')
 
     # -------
@@ -544,6 +676,9 @@ def action_update():
 
     if str_sns_serie_code.strip() != '':
         dict_data['SNS_SERIE_CODE'] = str_sns_serie_code
+    
+    if str_sns_type > 0:
+        dict_data['SNS_TYPE'] = str_sns_type
 
     object_f3c1_sensor.update(dict_data)
 

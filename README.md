@@ -42,8 +42,6 @@ a partir de uma determinada localização ao redor do mundo. A localização pod
 
 Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
-<PENDENTE>
-
 1. <b>assets</b>: Diretório para armazenamento de arquivos complementares da estrutura do sistema.
     - Diretório "images": Diretório para armazenamento de imagens.
 

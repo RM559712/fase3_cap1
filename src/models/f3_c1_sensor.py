@@ -3,6 +3,14 @@ from custom.helper import Helper
 
 class F3C1Sensor(Database):
 
+    # Constantes referentes aos tipos de sensores
+    TYPE_TEMPERATURE = 1
+    TYPE_HUMIDITY = 2
+    TYPE_LIGHT = 3
+    TYPE_RADIATION = 4
+    TYPE_SALINITY = 5
+    TYPE_PH = 6
+
     def __init__(self, object_database = None):
 
         super().__init__(object_database)

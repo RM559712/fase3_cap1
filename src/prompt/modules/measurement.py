@@ -504,13 +504,13 @@ def action_insert():
     dict_validate_irrigation['dict_filters_plantation']['float_ph_min'] = dict_data_plantation['PCI_PH_MIN']
     dict_validate_irrigation['dict_filters_plantation']['float_ph_max'] = dict_data_plantation['PCI_PH_MAX']
 
-    dict_validate_irrigation['dict_measurement']['int_sensor_type'] = '1'
+    dict_validate_irrigation['dict_measurement']['int_sensor_type'] = dict_data_sensor['SNS_TYPE']
     dict_validate_irrigation['dict_measurement']['float_value'] = float_msm_value
 
-    dict_validate_irrigation['dict_filters_rain']['float_latitude'] = float(dict_data_plantation['PCL_LATITUDE'])
-    dict_validate_irrigation['dict_filters_rain']['float_longitude'] = float(dict_data_plantation['PCL_LONGITUDE'])
-    dict_validate_irrigation['dict_filters_rain']['int_next_hours_validate'] = 4
-    dict_validate_irrigation['dict_filters_rain']['float_max_average_rain_volume'] = 4.2
+    dict_validate_irrigation['dict_filters_rain']['float_latitude'] = dict_data_plantation['PCL_LATITUDE']
+    dict_validate_irrigation['dict_filters_rain']['float_longitude'] = dict_data_plantation['PCL_LONGITUDE']
+    dict_validate_irrigation['dict_filters_rain']['int_next_hours_validate_rain'] = dict_data_plantation['PCL_NEXT_HOURS_VALIDATE_RAIN']
+    dict_validate_irrigation['dict_filters_rain']['float_max_average_rain_volume'] = dict_data_plantation['PCL_MAX_AVERAGE_RAIN_VOLUME']
 
     object_irrigation = Irrigation()
 
@@ -519,10 +519,6 @@ def action_insert():
         raise Exception(dict_return_validate_irrigation['message'])
 
     # <PENDENTE>
-    # - Adicionar o parâmetro "Tipo de sensor" no cadastro de sensores
-    #       - Enviar esse parâmetro na key "int_sensor_type" dentro de "dict_measurement"
-    # - Adicionar os parâmetros "Quantidade de horas para validação de chuva" e "Média máxima de chuva" no cadastro de plantações
-    #       - Enviar esses parâmetros nas keys "int_next_hours_validate" e "float_max_average_rain_volume" dentro da key "dict_filters_rain"
     pprint.pprint(dict_return_validate_irrigation)
 
     # Análises a partir de configurações da plantação

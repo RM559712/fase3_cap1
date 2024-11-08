@@ -28,7 +28,7 @@ class Irrigation:
     """
     def validate_begin_execution_by_plantation(self, dict_params: dict = {}) -> dict:
 
-        dict_return = {'status': True, 'dict_data': {'dict_analysis_filters_plantation': {'status': True}, 'dict_analysis_filters_rain': {'status': True}}}
+        dict_return = {'status': True, 'dict_data': {'dict_analysis_filters_plantation': {'status': False}, 'dict_analysis_filters_rain': {'status': False}}}
 
         try:
 
@@ -61,7 +61,7 @@ class Irrigation:
             float_value = dict_measurement.get('float_value', None)
             
             # <PENDENTE>
-
+            
             """
             Validação utilizando os filtros destinados à validação de chuva no local da plantação
 
@@ -76,9 +76,9 @@ class Irrigation:
 
                 # Parâmetro referente à quantidade de horas que deverá ser considerada para análise
                 # > Padrão: 1h
-                int_next_hours_validate = dict_filters_rain.get('int_next_hours_validate', 4)
+                int_next_hours_validate_rain = dict_filters_rain.get('int_next_hours_validate_rain', 4)
 
-                # Parâmetro referente à quantidade máxima média de chuva aceita para que a irrigação possa ser iniciada automaticamente
+                # Parâmetro referente à quantidade média máxima de chuva aceita para que a irrigação possa ser iniciada automaticamente
                 # > Padrão: 0 mm
                 float_max_average_rain_volume = dict_filters_rain.get('float_max_average_rain_volume', 0.00)
 
@@ -93,17 +93,18 @@ class Irrigation:
 
                 try:
 
-                    for dict_weather in dict_data_open_weather['dict_data']['list'][:int_next_hours_validate]:
+                    for dict_weather in dict_data_open_weather['dict_data']['list'][:int_next_hours_validate_rain]:
 
                         float_rain_volume += dict_weather.get('rain', {}).get('3h', 0.00)
 
                     # Variável que irá armazenar a média de chuva prevista para as horas definidas para validação
-                    float_average_rain_volume = (float_rain_volume / int_next_hours_validate)
+                    float_average_rain_volume = (float_rain_volume / int_next_hours_validate_rain)
 
                     if float_average_rain_volume > float_max_average_rain_volume:
-                        self.exception(f'A quantidade média de chuva prevista para para a(s) próxima(s) {int_next_hours_validate} hora(s) é de {float_average_rain_volume:.2f} mm e está acima do máximo permitido ( {float_max_average_rain_volume:.2f} mm ).')
+                        self.exception(f'A quantidade média de chuva prevista para para a(s) próxima(s) {int_next_hours_validate_rain} hora(s) é de {float_average_rain_volume:.2f} mm e está acima do máximo permitido ( {float_max_average_rain_volume:.2f} mm ).')
 
-                    dict_return['dict_data']['dict_analysis_filters_rain']['str_analisys'] = f'A quantidade média de chuva prevista para para a(s) próxima(s) {int_next_hours_validate} hora(s) é de {float_average_rain_volume:.2f} mm e está abaixo do máximo permitido ( {float_max_average_rain_volume:.2f} mm ).'
+                    dict_return['dict_data']['dict_analysis_filters_rain']['status'] = True
+                    dict_return['dict_data']['dict_analysis_filters_rain']['str_analisys'] = f'A quantidade média de chuva prevista para para a(s) próxima(s) {int_next_hours_validate_rain} hora(s) é de {float_average_rain_volume:.2f} mm e está abaixo do máximo permitido ( {float_max_average_rain_volume:.2f} mm ).'
 
                 except Exception as error:
 
