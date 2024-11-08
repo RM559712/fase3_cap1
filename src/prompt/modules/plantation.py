@@ -532,10 +532,10 @@ def format_data_view_light(dict_data: dict = {}) -> str:
     list_labels = []
 
     if 'PCI_LIGHT_MIN' in dict_data and type(dict_data['PCI_LIGHT_MIN']) != None and Helper.is_float(dict_data['PCI_LIGHT_MIN']) == True:
-        list_labels.append(f'Mínimo de {dict_data['PCI_LIGHT_MIN']}%')
+        list_labels.append(f'Mínimo de {dict_data['PCI_LIGHT_MIN']} lux')
 
     if 'PCI_LIGHT_MAX' in dict_data and type(dict_data['PCI_LIGHT_MAX']) != None and Helper.is_float(dict_data['PCI_LIGHT_MAX']) == True:
-        list_labels.append(f'Máximo de {dict_data['PCI_LIGHT_MAX']}%')
+        list_labels.append(f'Máximo de {dict_data['PCI_LIGHT_MAX']} lux')
 
     str_return = 'Luminosidade ideal: '
     str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'
@@ -644,10 +644,10 @@ def format_data_view_radiation(dict_data: dict = {}) -> str:
     list_labels = []
 
     if 'PCI_RADIATION_MIN' in dict_data and type(dict_data['PCI_RADIATION_MIN']) != None and Helper.is_float(dict_data['PCI_RADIATION_MIN']) == True:
-        list_labels.append(f'Mínimo de {dict_data['PCI_RADIATION_MIN']}%')
+        list_labels.append(f'Mínimo de {dict_data['PCI_RADIATION_MIN']} W/m²')
 
     if 'PCI_RADIATION_MAX' in dict_data and type(dict_data['PCI_RADIATION_MAX']) != None and Helper.is_float(dict_data['PCI_RADIATION_MAX']) == True:
-        list_labels.append(f'Máximo de {dict_data['PCI_RADIATION_MAX']}%')
+        list_labels.append(f'Máximo de {dict_data['PCI_RADIATION_MAX']} W/m²')
 
     str_return = 'Radiação solar ideal: '
     str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'
@@ -756,10 +756,10 @@ def format_data_view_salinity(dict_data: dict = {}) -> str:
     list_labels = []
 
     if 'PCI_SALINITY_MIN' in dict_data and type(dict_data['PCI_SALINITY_MIN']) != None and Helper.is_float(dict_data['PCI_SALINITY_MIN']) == True:
-        list_labels.append(f'Mínimo de {dict_data['PCI_SALINITY_MIN']}%')
+        list_labels.append(f'Mínimo de {dict_data['PCI_SALINITY_MIN']} dS/m')
 
     if 'PCI_SALINITY_MAX' in dict_data and type(dict_data['PCI_SALINITY_MAX']) != None and Helper.is_float(dict_data['PCI_SALINITY_MAX']) == True:
-        list_labels.append(f'Máximo de {dict_data['PCI_SALINITY_MAX']}%')
+        list_labels.append(f'Máximo de {dict_data['PCI_SALINITY_MAX']} dS/m')
 
     str_return = 'Salinidade ideal: '
     str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'
@@ -868,10 +868,10 @@ def format_data_view_ph(dict_data: dict = {}) -> str:
     list_labels = []
 
     if 'PCI_PH_MIN' in dict_data and type(dict_data['PCI_PH_MIN']) != None and Helper.is_float(dict_data['PCI_PH_MIN']) == True:
-        list_labels.append(f'Mínimo de {dict_data['PCI_PH_MIN']}%')
+        list_labels.append(f'Mínimo de {dict_data['PCI_PH_MIN']}')
 
     if 'PCI_PH_MAX' in dict_data and type(dict_data['PCI_PH_MAX']) != None and Helper.is_float(dict_data['PCI_PH_MAX']) == True:
-        list_labels.append(f'Máximo de {dict_data['PCI_PH_MAX']}%')
+        list_labels.append(f'Máximo de {dict_data['PCI_PH_MAX']}')
 
     str_return = 'pH ideal: '
     str_return += f'{' | ' . join(list_labels)}' if len(list_labels) > 0 else 'N/I'

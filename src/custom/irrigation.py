@@ -2,7 +2,7 @@ from datetime import datetime
 import pprint
 from custom.helper import Helper
 from custom.openweather import OpenWeather
-from models.f3_c1_irrigation import F3C1Irrigation
+from models.f3_c1_sensor import F3C1Sensor
 
 class Irrigation:
 
@@ -43,25 +43,53 @@ class Irrigation:
             """
 
             # Parâmetros relacionados às configurações da plantação
-            float_temp_min = dict_filters_plantation.get('float_temp_min', None)
             float_temp_max = dict_filters_plantation.get('float_temp_max', None)
             float_humidity_min = dict_filters_plantation.get('float_humidity_min', None)
-            float_humidity_max = dict_filters_plantation.get('float_humidity_max', None)
-            float_light_min = dict_filters_plantation.get('float_light_min', None)
             float_light_max = dict_filters_plantation.get('float_light_max', None)
-            float_radiation_min = dict_filters_plantation.get('float_radiation_min', None)
             float_radiation_max = dict_filters_plantation.get('float_radiation_max', None)
-            float_salinity_min = dict_filters_plantation.get('float_salinity_min', None)
-            float_salinity_max = dict_filters_plantation.get('float_salinity_max', None)
-            float_ph_min = dict_filters_plantation.get('float_ph_min', None)
-            float_ph_max = dict_filters_plantation.get('float_ph_max', None)
 
             # Parâmetros relacionados à medição que deverá ser utilizada na filtragem
             int_sensor_type = dict_measurement.get('int_sensor_type', None)
             float_value = dict_measurement.get('float_value', None)
             
-            # <PENDENTE>
-            
+            if type(int_sensor_type) != type(None):
+
+                try:
+
+                    dict_sensor = F3C1Sensor.get_type_options(int_sensor_type)
+
+                    match int_sensor_type:
+
+                        case F3C1Sensor.TYPE_TEMPERATURE:
+
+                            if float_value < float_temp_max:
+                                self.exception(f'De acordo com a medição informada ( {float_value}°C ), não será necessário iniciar a irrigação pois a temperatura está abaixo do limite máximo ( {float_temp_max}°C ).')
+
+                        case F3C1Sensor.TYPE_HUMIDITY:
+                            
+                            if float_value > float_humidity_min:
+                                self.exception(f'De acordo com a medição informada ( {float_value}% ), não será necessário iniciar a irrigação pois a umidade está acima do limite mínimo ( {float_humidity_min}% ).')
+
+                        case F3C1Sensor.TYPE_LIGHT:
+                            
+                            if float_value < float_light_max:
+                                self.exception(f'De acordo com a medição informada ( {float_value} lux ), não será necessário iniciar a irrigação pois a luminosidade está abaixo do limite máximo ( {float_light_max} lux ).')
+
+                        case F3C1Sensor.TYPE_RADIATION:
+
+                           if float_value < float_radiation_max:
+                                self.exception(f'De acordo com a medição informada ( {float_value} W/m² ), não será necessário iniciar a irrigação pois a radiação está abaixo do limite máximo ( {float_radiation_max} W/m² ).')
+
+                        case _:
+                            self.exception(f'Não foi possível concluir o processo pois o tipo de sensor informado ( {dict_sensor['title']} ) não atende aos requisitos para irrigação automática.')
+
+                    # Caso todas as validações tenham sido aprovadas, significa que a irrigação deverá ser iniciada
+                    dict_return['dict_data']['dict_analysis_filters_plantation']['status'] = True
+
+                except Exception as error:
+
+                    dict_return['dict_data']['dict_analysis_filters_plantation'] = {'status': False, 'message': error}
+
             """
             Validação utilizando os filtros destinados à validação de chuva no local da plantação
 
@@ -74,24 +102,24 @@ class Irrigation:
 
             if type(float_latitude) != type(None) and type(float_longitude) != type(None):
 
-                # Parâmetro referente à quantidade de horas que deverá ser considerada para análise
-                # > Padrão: 1h
-                int_next_hours_validate_rain = dict_filters_rain.get('int_next_hours_validate_rain', 4)
-
-                # Parâmetro referente à quantidade média máxima de chuva aceita para que a irrigação possa ser iniciada automaticamente
-                # > Padrão: 0 mm
-                float_max_average_rain_volume = dict_filters_rain.get('float_max_average_rain_volume', 0.00)
-
-                # Variável que irá armazenar a quantidade de chuva prevista para as horas definidas para validação
-                float_rain_volume = 0.00
-
-                object_open_weather = OpenWeather()
-
-                dict_data_open_weather = object_open_weather.get_weather_forecast_data_by_location(float_latitude = float_latitude, float_longitude = float_longitude)
-                if dict_data_open_weather['status'] == False: 
-                    self.exception(str(dict_data_open_weather['message']))
-
                 try:
+
+                    # Parâmetro referente à quantidade de horas que deverá ser considerada para análise
+                    # > Padrão: 1h
+                    int_next_hours_validate_rain = dict_filters_rain.get('int_next_hours_validate_rain', 4)
+
+                    # Parâmetro referente à quantidade média máxima de chuva aceita para que a irrigação possa ser iniciada automaticamente
+                    # > Padrão: 0 mm
+                    float_max_average_rain_volume = dict_filters_rain.get('float_max_average_rain_volume', 0.00)
+
+                    # Variável que irá armazenar a quantidade de chuva prevista para as horas definidas para validação
+                    float_rain_volume = 0.00
+
+                    object_open_weather = OpenWeather()
+
+                    dict_data_open_weather = object_open_weather.get_weather_forecast_data_by_location(float_latitude = float(float_latitude), float_longitude = float(float_longitude))
+                    if dict_data_open_weather['status'] == False: 
+                        self.exception(str(dict_data_open_weather['message']))
 
                     for dict_weather in dict_data_open_weather['dict_data']['list'][:int_next_hours_validate_rain]:
 
@@ -103,8 +131,8 @@ class Irrigation:
                     if float_average_rain_volume > float_max_average_rain_volume:
                         self.exception(f'A quantidade média de chuva prevista para para a(s) próxima(s) {int_next_hours_validate_rain} hora(s) é de {float_average_rain_volume:.2f} mm e está acima do máximo permitido ( {float_max_average_rain_volume:.2f} mm ).')
 
+                    # Caso todas as validações tenham sido aprovadas, significa que a irrigação deverá ser iniciada
                     dict_return['dict_data']['dict_analysis_filters_rain']['status'] = True
-                    dict_return['dict_data']['dict_analysis_filters_rain']['str_analisys'] = f'A quantidade média de chuva prevista para para a(s) próxima(s) {int_next_hours_validate_rain} hora(s) é de {float_average_rain_volume:.2f} mm e está abaixo do máximo permitido ( {float_max_average_rain_volume:.2f} mm ).'
 
                 except Exception as error:
 

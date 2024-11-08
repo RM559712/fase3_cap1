@@ -323,65 +323,6 @@ def validate_serie_code(dict_data: dict = {}) -> str:
 
 
 """
-Método responsável por retornar os tipos de sensores do módulo "Sensores"
-
-Arguments:
-- int_code: Código de um tipo específico para retorno ( int )
-
-Return: list
-"""
-def get_type_options(int_code: int = 0) -> list:
-
-    dict_types = [
-        {
-            'code': F3C1Sensor.TYPE_TEMPERATURE,
-            'title': 'Sensor de Temperatura do solo'
-        },{
-            'code': F3C1Sensor.TYPE_HUMIDITY,
-            'title': 'Sensor de Umidade do solo'
-        },{
-            'code': F3C1Sensor.TYPE_LIGHT,
-            'title': 'Sensor de luminosidade'
-        },{
-            'code': F3C1Sensor.TYPE_RADIATION,
-            'title': 'Sensor de radiação'
-        },{
-            'code': F3C1Sensor.TYPE_SALINITY,
-            'title': 'Sensor de salinidade do solo'
-        },{
-            'code': F3C1Sensor.TYPE_PH,
-            'title': 'Sensor de pH do solo'
-        }
-    ]
-
-    if int_code > 0:
-
-        for dict_type in dict_types:
-
-            if dict_type['code'] == int_code:
-                return dict_type
-
-    return dict_types
-
-
-"""
-Método responsável por retornar os códigos dos tipos de sensores do módulo "Sensores"
-
-Return: list
-"""
-def get_type_options_codes() -> list:
-
-    list_return = []
-
-    list_type_options = get_type_options()
-
-    for dict_type_option in list_type_options:
-        list_return.append(dict_type_option['code'])
-
-    return list_return
-
-
-"""
 Método responsável pela formatação de visualização do tipo de sensor do módulo "Sensores"
 
 Arguments:
@@ -392,7 +333,7 @@ Return: str
 def format_data_view_type(dict_data: dict = {}) -> str:
 
     str_return = 'Tipo de sensor: '
-    str_return += f'{get_type_options(dict_data['SNS_TYPE'])['title']}' if 'SNS_TYPE' in dict_data and type(dict_data['SNS_TYPE']) != None and Helper.is_int(dict_data['SNS_TYPE']) == True else 'N/I'
+    str_return += f'{F3C1Sensor.get_type_options(dict_data['SNS_TYPE'])['title']}' if 'SNS_TYPE' in dict_data and type(dict_data['SNS_TYPE']) != None and Helper.is_int(dict_data['SNS_TYPE']) == True else 'N/I'
 
     return str_return
 
@@ -412,7 +353,7 @@ def validate_type(dict_data: dict = {}) -> int:
     str_label = f'Importante: Caso deseje manter o tipo de sensor atual ( abaixo ), basta ignorar o preenchimento.\n{format_data_view_type(dict_data)}\n' if bool_is_update == True else ''
 
     str_label += f'Os tipos de sensores são: '
-    list_type_options = get_type_options()
+    list_type_options = F3C1Sensor.get_type_options()
     for list_type_option in list_type_options:
         str_label += f'{list_type_option['title']} [{list_type_option['code']}]; '
 
@@ -431,7 +372,7 @@ def validate_type(dict_data: dict = {}) -> int:
 
             if int_return.strip() != '':
 
-                if int(int_return) not in get_type_options_codes(): 
+                if int(int_return) not in F3C1Sensor.get_type_options_codes(): 
                     raise Exception('A opção informada deve representar um dos tipos disponíveis.')
 
             break
