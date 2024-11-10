@@ -34,7 +34,15 @@ Essa versão possui funcionalidades que visam automatizar a execução de irriga
 
 Algumas informações sobre os módulos dessa versão:
 
-- <PENDENTE>
+- <strong>Módulo "Culturas"</strong>: Permite que sejam cadastradas diferentes culturas.
+- <strong>Módulo "Plantações"</strong>: Permite que sejam cadastradas diferentes plantações, podendo associá-las à culturas utilizando como parâmetro o ID conforme cadastro no módulo "Culturas". Além disso, caso necessário, é possível configurar a plantação com os parâmetros "Temperatura" ( <i>mínimo e máximo - formato °C</i> ), "Umidade" ( <i>mínimo e máximo - formato %</i> ), "Luminosidade" ( <i>mínimo e máximo - formato lux</i> ), "Radiação" ( <i>mínimo e máximo - formato W/m²</i> ), "Salinidade" ( <i>mínimo e máximo - formato dS/m</i> ) e "pH" ( <i>mínimo e máximo - formato inteiro</i> ). Esses parâmetros são utilizados, por exemplo, para que a irrigação automática possa ser executada a partir das medições armazenadas no sistema conforme veremos mais a frente.
+- <strong>Módulo "Sensores"</strong>: Permite que sejam cadastrados diferentes sensores com seus códigos de série e associados aos possíveis tipos "Sensor de Temperatura do solo", "Sensor de Umidade do solo", "Sensor de luminosidade", "Sensor de radiação", "Sensor de salinidade do solo" ou "Sensor de pH do solo".
+- <strong>Módulo "Irrigações"</strong>: Permite que irrigações sejam iniciadas ou finalizadas manualmente utilizando como parâmetro o ID da plantação desejada conforme cadastro no módulo "Plantações". Ao finalizar uma irrigação, é possível informar a quantidade de água utilizada em formato ml.
+- <strong>Módulo "Medições"</strong>: Permite que medições sejam cadastradas utilizando como parâmetro o ID da plantação na qual a medição foi efetuada conforme cadastro no módulo "Plantações", o ID do sensor utilizado na medição conforme cadastro no módulo "Sensores" e o valor da medição. Ao final do cadastro, caso a plantação não esteja com uma irrigação em execução, é possível que a irrigação seja iniciada de forma automática caso o valor da medição atenda às possíveis regras:
+    - <strong>Sensor de Temperatura do solo</strong>: Caso a temperatura do solo esteja maior do que o limite máximo configurado. A temperatura influencia a taxa de evaporação. Com temperaturas altas, o solo seca mais rápido, o que pode demandar mais irrigação.
+    - <strong>Sensor de Umidade do solo</strong>: Caso a umidade do solo esteja menor do que o limite mínimo configurado. Um nível de umidade abaixo de um limite determinado indica que o solo está seco e precisa de irrigação.
+    - <strong>Sensor de luminosidade</strong>: Caso a luminosidade do local da plantação esteja maior do que o limite máximo configurado. A taxa de evaporação é maior quando a luminosidade do local é muito alta, o que pode demandar mais irrigação.
+    - <strong>Sensor de radiação</strong>: Caso a radiação do local da plantação esteja maior do que o limite máximo configurado. ocorrerem perdas. A taxa de evaporação é maior quando a taxa de radiação do local é muito alta, o que pode demandar mais irrigação.
 
 ## 📁 Estrutura de pastas
 

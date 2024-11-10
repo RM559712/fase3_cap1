@@ -42,12 +42,6 @@ class Irrigation:
             - Regras: A partir de parâmetros específicos, será possível verificar se uma irrigação automática poderá ou não ser iniciada.
             """
 
-            # Parâmetros relacionados às configurações da plantação
-            float_temp_max = dict_filters_plantation.get('float_temp_max', None)
-            float_humidity_min = dict_filters_plantation.get('float_humidity_min', None)
-            float_light_max = dict_filters_plantation.get('float_light_max', None)
-            float_radiation_max = dict_filters_plantation.get('float_radiation_max', None)
-
             # Parâmetros relacionados à medição que deverá ser utilizada na filtragem
             int_sensor_type = dict_measurement.get('int_sensor_type', None)
             float_value = dict_measurement.get('float_value', None)
@@ -62,20 +56,40 @@ class Irrigation:
 
                         case F3C1Sensor.TYPE_TEMPERATURE:
 
+                            float_temp_max = dict_filters_plantation.get('float_temp_max', None)
+
+                            if type(float_temp_max) == type(None):
+                                self.exception('A plantação não possui um limite máximo de temperatura configurada, portanto, a validação para iniciação da irrigação automática não será executada.')
+
                             if float_value < float_temp_max:
                                 self.exception(f'De acordo com a medição informada ( {float_value}°C ), não será necessário iniciar a irrigação pois a temperatura está abaixo do limite máximo ( {float_temp_max}°C ).')
 
                         case F3C1Sensor.TYPE_HUMIDITY:
+
+                            float_humidity_min = dict_filters_plantation.get('float_humidity_min', None)
+
+                            if type(float_humidity_min) == type(None):
+                                self.exception('A plantação não possui um limite mínimo de umidade configurada, portanto, a validação para iniciação da irrigação automática não será executada.')
                             
                             if float_value > float_humidity_min:
                                 self.exception(f'De acordo com a medição informada ( {float_value}% ), não será necessário iniciar a irrigação pois a umidade está acima do limite mínimo ( {float_humidity_min}% ).')
 
                         case F3C1Sensor.TYPE_LIGHT:
+
+                            float_light_max = dict_filters_plantation.get('float_light_max', None)
+
+                            if type(float_light_max) == type(None):
+                                self.exception('A plantação não possui um limite máximo de luminosidade configurada, portanto, a validação para iniciação da irrigação automática não será executada.')
                             
                             if float_value < float_light_max:
                                 self.exception(f'De acordo com a medição informada ( {float_value} lux ), não será necessário iniciar a irrigação pois a luminosidade está abaixo do limite máximo ( {float_light_max} lux ).')
 
                         case F3C1Sensor.TYPE_RADIATION:
+                           
+                           float_radiation_max = dict_filters_plantation.get('float_radiation_max', None)
+
+                           if type(float_radiation_max) == type(None):
+                                self.exception('A plantação não possui um limite máximo de radiação configurada, portanto, a validação para iniciação da irrigação automática não será executada.')
 
                            if float_value < float_radiation_max:
                                 self.exception(f'De acordo com a medição informada ( {float_value} W/m² ), não será necessário iniciar a irrigação pois a radiação está abaixo do limite máximo ( {float_radiation_max} W/m² ).')

@@ -51,7 +51,7 @@ Return: list
 """
 def get_menu_options() -> list:
 
-    return [
+    """return [
         {
             'code': 1,
             'title': 'Visualizar cadastros',
@@ -70,6 +70,22 @@ def get_menu_options() -> list:
             'action': action_delete
         },{
             'code': 5,
+            'title': 'Voltar ao menu principal',
+            'action': Main.init_system
+        }
+    ]"""
+
+    return [
+        {
+            'code': 1,
+            'title': 'Visualizar cadastros',
+            'action': action_list
+        },{
+            'code': 2,
+            'title': 'Cadastrar',
+            'action': action_insert
+        },{
+            'code': 3,
             'title': 'Voltar ao menu principal',
             'action': Main.init_system
         }
