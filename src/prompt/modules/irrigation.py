@@ -477,12 +477,7 @@ def action_ini():
 
     object_f3c1_irrigation = F3C1Irrigation()
 
-    dict_begin_execution = object_f3c1_irrigation.begin_execution_by_plantation({
-
-        'pln_id': dict_data_plantation['PLN_ID']
-
-    })
-
+    dict_begin_execution = object_f3c1_irrigation.begin_execution_by_plantation({'pln_id': dict_data_plantation['PLN_ID'], 'irg_origin': F3C1Irrigation.ORIGIN_ORIGIN_MANUAL})
     if dict_begin_execution['status'] == False:
         raise Exception(dict_begin_execution['message'])
 

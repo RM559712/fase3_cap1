@@ -107,6 +107,7 @@ class F3C1Irrigation(Database):
             dict_data = {}
 
             dict_data['IRG_PLN_ID'] = dict_params['pln_id']
+            dict_data['IRG_ORIGIN'] = dict_params['irg_origin']
 
             self.insert(dict_data)
 

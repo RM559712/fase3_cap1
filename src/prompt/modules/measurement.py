@@ -585,7 +585,7 @@ def action_insert():
         if object_f3c1_irrigation.validate_exists_active_execution_by_plantation(int_msm_pln_id) == True:
             raise Exception('Não foi possível concluir o processo pois já existe uma irrigação iniciada para a plantação informada.')
 
-        dict_begin_execution = object_f3c1_irrigation.begin_execution_by_plantation({'pln_id': int_msm_pln_id})
+        dict_begin_execution = object_f3c1_irrigation.begin_execution_by_plantation({'pln_id': int_msm_pln_id, 'irg_origin': F3C1Irrigation.ORIGIN_AUTOMATED})
         if dict_begin_execution['status'] == False:
             raise Exception(dict_begin_execution['message'])
 
