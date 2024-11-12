@@ -45,12 +45,12 @@ Algumas informações sobre os módulos dessa versão:
     - <strong>Sensor de radiação</strong>: Caso a radiação do local da plantação esteja maior do que o limite máximo configurado. ocorrerem perdas. A taxa de evaporação é maior quando a taxa de radiação do local é muito alta, o que pode demandar mais irrigação.
     - <strong>Verificação de chuva</strong>: Caso as verificações acima sejam sejam atendidas, será verificado se a região da plantação está sendo afetada com chuvas utilizando como parâmetro a latitude, a longitude e a quantidade de horas entre o horário da medição e as próximas horas. Por fim, caso positivo, será verificado se a quantidade média de chuva no período configurado é inferior à quantidade média máxima de chuva. Mesmo que uma plantação esteja sendo afetada com chuvas, pode ser que o nível de umidade continue abaixo de um limite determinado.
 - <strong>Execução dos sensores</strong>: Permite que os sensores sejam simulados, de modo que suas respectivas medições sejam exibidas.
-    - <strong>Sensor de Temperatura do solo</strong>: Exemplo desenvolvido de forma simples para simular um sensor de temperatura de solo ( https://wokwi.com/projects/414284258762268673 );
-    - <strong>Sensor de Umidade do solo</strong>: Exemplo desenvolvido de forma simples para simular um sensor de umidade de solo ( https://wokwi.com/projects/414284346299505665 );
-    - <strong>Sensor de luminosidade</strong>: Exemplo desenvolvido de forma simples para simular um sensor de luminosidade ( https://wokwi.com/projects/414284365617425409 );
-    - <strong>Sensor de radiação</strong>: Exemplo desenvolvido de forma simples para simular um sensor de radiação ( https://wokwi.com/projects/414284387471852545 );
-    - <strong>Sensor de salinidade do solo</strong>: Exemplo desenvolvido de forma simples para simular um sensor de salinidade de solo ( https://wokwi.com/projects/414284404628657153 );
-    - <strong>Sensor de pH do solo</strong>: Exemplo desenvolvido de forma simples para simular um sensor de pH de solo ( https://wokwi.com/projects/414284423030119425 );
+    - <strong>Sensor de Temperatura do solo</strong>: Exemplo desenvolvido de forma simples para simular um sensor de temperatura de solo. Pode ser visualizado e testado no seguinte endereço da plataforma Wokwi: https://wokwi.com/projects/414284258762268673;
+    - <strong>Sensor de Umidade do solo</strong>: Exemplo desenvolvido de forma simples para simular um sensor de umidade de solo. Pode ser visualizado e testado no seguinte endereço da plataforma Wokwi: https://wokwi.com/projects/414284346299505665;
+    - <strong>Sensor de luminosidade</strong>: Exemplo desenvolvido de forma simples para simular um sensor de luminosidade. Pode ser visualizado e testado no seguinte endereço da plataforma Wokwi: https://wokwi.com/projects/414284365617425409;
+    - <strong>Sensor de radiação</strong>: Exemplo desenvolvido de forma simples para simular um sensor de radiação. Pode ser visualizado e testado no seguinte endereço da plataforma Wokwi: https://wokwi.com/projects/414284387471852545;
+    - <strong>Sensor de salinidade do solo</strong>: Exemplo desenvolvido de forma simples para simular um sensor de salinidade de solo. Pode ser visualizado e testado no seguinte endereço da plataforma Wokwi: https://wokwi.com/projects/414284404628657153;
+    - <strong>Sensor de pH do solo</strong>: Exemplo desenvolvido de forma simples para simular um sensor de pH de solo. Pode ser visualizado e testado no seguinte endereço da plataforma Wokwi: https://wokwi.com/projects/414284423030119425;
 
 ## 📁 Estrutura de pastas
 
